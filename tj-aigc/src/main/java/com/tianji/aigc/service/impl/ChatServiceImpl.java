@@ -17,9 +17,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -45,6 +48,8 @@ public class ChatServiceImpl implements ChatService {
     // 输出结束的标记
     private static final ChatEventVO STOP_EVENT = ChatEventVO.builder().eventType(ChatEventTypeEnum.STOP.getValue()).build();
 
+    private final VectorStore vectorStore;
+
     // 存储大模型的生成状态，这里采用ConcurrentHashMap是确保线程安全
     // 目前的版本暂时用Map实现，如果考虑分布式环境的话，可以考虑用redis来实现
     // 已改为redis实现
@@ -62,13 +67,24 @@ public class ChatServiceImpl implements ChatService {
         var userId = UserContext.getUser();
 
         var hashOps = this.stringRedisTemplate.boundHashOps(GENERATE_STATUS_KEY);
+        // TODO OPT-003：当前所有聊天请求都会执行 RAG 检索；后续按问题类型按需启用，并复用 Advisor 实例
+        // 创建RAG增强
+        var qaAdvisor = QuestionAnswerAdvisor.builder(this.vectorStore)
+                .searchRequest(
+                        SearchRequest.builder()
+                                .similarityThreshold(0.6d)
+                                .topK(6)
+                                .build())
+                .build();
 
         return this.chatClient.prompt()
                 .system(promptSystem -> promptSystem
                         .text(this.systemPromptConfig.getChatSystemMessage().get()) // 设置系统提示语
                         .param("now", DateUtil.now()) // 设置当前时间的参数
                 )
-                .advisors(advisor -> advisor.param(ChatMemory.CONVERSATION_ID, conversationId))
+                .advisors(advisor -> advisor
+                        .advisors(qaAdvisor) // 添加RAG增强
+                        .param(ChatMemory.CONVERSATION_ID, conversationId))
                 .toolContext(Map.of(Constant.REQUEST_ID, requestId, Constant.USER_ID, userId))
                 .user(question)
                 .stream()
