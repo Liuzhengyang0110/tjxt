@@ -49,6 +49,8 @@ public class RedisChatMemoryRepository implements ChatMemoryRepository {
     @Override
     public List<Message> findByConversationId(String conversationId) {
         var redisKey = getKey(conversationId);
+
+        // 获得一个已经绑定RedisKey的操作对象，后续不用重复传入Key
         var listOps = this.stringRedisTemplate.boundListOps(redisKey);
         // 获取列表中的所有元素
         var messages = listOps.range(0, -1);
