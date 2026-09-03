@@ -10,6 +10,7 @@ import com.tianji.aigc.config.ToolResultHolder;
 import com.tianji.aigc.constants.Constant;
 import com.tianji.aigc.enums.ChatEventTypeEnum;
 import com.tianji.aigc.service.ChatService;
+import com.tianji.aigc.service.ChatSessionService;
 import com.tianji.aigc.vo.ChatEventVO;
 import com.tianji.common.utils.DateUtils;
 import com.tianji.common.utils.UserContext;
@@ -45,6 +46,8 @@ public class ChatServiceImpl implements ChatService {
 
     private static final String GENERATE_STATUS_KEY = "GENERATE_STATUS";
 
+    private final ChatSessionService chatSessionService;
+
     // 输出结束的标记
     private static final ChatEventVO STOP_EVENT = ChatEventVO.builder().eventType(ChatEventTypeEnum.STOP.getValue()).build();
 
@@ -67,6 +70,10 @@ public class ChatServiceImpl implements ChatService {
         var userId = UserContext.getUser();
 
         var hashOps = this.stringRedisTemplate.boundHashOps(GENERATE_STATUS_KEY);
+
+        // 异步更新会话信息
+        this.chatSessionService.update(sessionId, question, userId);
+
         // TODO OPT-003：当前所有聊天请求都会执行 RAG 检索；后续按问题类型按需启用，并复用 Advisor 实例
         // 创建RAG增强
         var qaAdvisor = QuestionAnswerAdvisor.builder(this.vectorStore)
