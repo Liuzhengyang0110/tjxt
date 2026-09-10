@@ -9,6 +9,10 @@ spring:
     name: aigc-service
   main:
     allow-circular-references: true # 允许循环引用
+  servlet:
+    multipart:
+      max-file-size: 7MB
+      max-request-size: 8MB
 tj:
   swagger:
     enable: true
@@ -26,11 +30,42 @@ tj:
   jdbc:
     database: tj_aigc #指定使用的数据库名
   ai:
+    dashscope:
+      websocket-url: wss://dashscope.aliyuncs.com/api-ws/v1/inference
+      tts:
+        model: qwen-audio-3.0-tts-flash
+        voice: longanhuan_v3.6
+        response-format: mp3
+        speed: 1.0
+        timeout-ms: 120000
+      asr:
+        url: https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation
+        model: qwen-audio-3.0-asr-flash
+        format: wav
+        language-hints:
+          - zh
+        max-file-size: 7MB
+        timeout-ms: 120000
     prompt:
       system:
         chat:
           data-id: system-chat-message.txt
           group: DEFAULT_GROUP
           timeout-ms: 20000
+        route-agent:
+          data-id: route-agent-system-message.txt
+        recommend-agent:
+          data-id: recommend-agent-system-message.txt
+        buy-agent:
+          data-id: buy-agent-system-message.txt
+        consult-agent:
+          data-id: consult-agent-system-message.txt
+        knowledge-agent:
+          data-id: knowledge-agent-system-message.txt
+        text:
+          data-id: text-system-chat-message.txt
     memory:
       max: 100
+      type: Redis # Redis / Mysql
+    chat-type: ENHANCE # ROUTE / ENHANCE / APP
+    user-id: 9999

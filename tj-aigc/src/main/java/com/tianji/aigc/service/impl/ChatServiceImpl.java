@@ -24,6 +24,7 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -34,9 +35,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "tj.ai", name = "chat-type", havingValue = "ENHANCE")
 public class ChatServiceImpl implements ChatService {
 
     private final ChatClient chatClient;
+
+    private final ChatClient openAiChatClient;
 
     private final SystemPromptConfig systemPromptConfig;
 
@@ -152,5 +156,13 @@ public class ChatServiceImpl implements ChatService {
      */
     private void saveStopHistoryRecord(String conversationId, String content) {
         this.chatMemory.add(conversationId, new AssistantMessage(content));
+    }
+
+    @Override
+    public String chatText(String question) {
+        return this.openAiChatClient.prompt()
+                .system(this.systemPromptConfig.getTextSystemMessage().get())
+                .user(question)
+                .call().content();
     }
 }
