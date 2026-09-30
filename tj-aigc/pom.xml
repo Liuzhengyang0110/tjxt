@@ -56,6 +56,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- 路由指标；保持 Actuator 默认端点暴露策略，不开放所有端点 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <!--swagger依赖-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>

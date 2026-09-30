@@ -1,38 +1,61 @@
 package com.tianji.aigc.service.impl;
 
-import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.core.util.IdUtil;
 import com.tianji.aigc.agent.AbstractAgent;
 import com.tianji.aigc.agent.Agent;
+import com.tianji.aigc.decision.model.RouteDecision;
+import com.tianji.aigc.decision.service.RouteDecisionService;
 import com.tianji.aigc.enums.AgentTypeEnum;
 import com.tianji.aigc.enums.ChatEventTypeEnum;
 import com.tianji.aigc.service.ChatService;
 import com.tianji.aigc.vo.ChatEventVO;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+@Slf4j
 @Service
-@RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "tj.ai", name = "chat-type", havingValue = "ROUTE")
 public class AgentServiceImpl implements ChatService {
+    private final RouteDecisionService routeDecisionService;
+    private final Map<AgentTypeEnum, Agent> agentMap;
+
+    public AgentServiceImpl(RouteDecisionService routeDecisionService, List<Agent> agents) {
+        this.routeDecisionService = routeDecisionService;
+        this.agentMap = agents.stream().collect(Collectors.toUnmodifiableMap(
+                Agent::getAgentType,
+                Function.identity()
+        ));
+    }
 
     @Override
     public Flux<ChatEventVO> chat(String question, String sessionId) {
-        // 先通过路由智能体，分析用户的意图，再执行后面的逻辑
-        var result = this.findAgentByType(AgentTypeEnum.ROUTE).process(question, sessionId);
-        var agentTypeEnum = AgentTypeEnum.agentNameOf(result);
+        RouteDecision decision = routeDecisionService.decide(question, sessionId);
+        AgentTypeEnum agentType = decision == null ? null : decision.agentType();
+        Agent agent = findAgentByType(agentType);
 
-        var agent = this.findAgentByType(agentTypeEnum);
-        if (agent == null) {
-            // 找不到对应的智能体，直接返回结果
-            var chatEventVO = ChatEventVO.builder()
-                    .eventType(ChatEventTypeEnum.DATA.getValue())
-                    .eventData(result)
-                    .build();
-            return Flux.just(chatEventVO, AbstractAgent.STOP_EVENT);
+        if (agent == null || agentType == AgentTypeEnum.ROUTE) {
+            log.warn("Invalid route decision: routeRequestId={}, agent={}, source={}, fallbackReason={}",
+                    IdUtil.fastSimpleUUID(),
+                    agentType,
+                    decision == null ? null : decision.source(),
+                    decision == null ? null : decision.fallbackReason());
+            Agent safeAgent = findAgentByType(AgentTypeEnum.KNOWLEDGE);
+            if (safeAgent == null) {
+                ChatEventVO friendlyErrorEvent = ChatEventVO.builder()
+                        .eventType(ChatEventTypeEnum.DATA.getValue())
+                        .eventData("抱歉，当前服务暂时不可用，请稍后重试。")
+                        .build();
+                return Flux.just(friendlyErrorEvent, AbstractAgent.STOP_EVENT);
+            }
+            return safeAgent.processStream(question, sessionId);
         }
-        // 执行智能体的逻辑
         return agent.processStream(question, sessionId);
     }
 
@@ -56,13 +79,6 @@ public class AgentServiceImpl implements ChatService {
         if (agentTypeEnum == null) {
             return null;
         }
-        var beans = SpringUtil.getBeansOfType(Agent.class);
-        // 遍历所有Agent Bean查找匹配类型
-        for (Agent agent : beans.values()) {
-            if (agentTypeEnum == agent.getAgentType()) {
-                return agent;
-            }
-        }
-        return null;
+        return agentMap.get(agentTypeEnum);
     }
 }

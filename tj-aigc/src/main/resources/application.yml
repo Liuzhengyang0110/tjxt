@@ -30,6 +30,22 @@ tj:
   jdbc:
     database: tj_aigc #指定使用的数据库名
   ai:
+    route:
+      provider: LLM
+      shadow-enabled: false
+      fallback-enabled: true
+      default-confidence-threshold: 0.85
+      safe-default-agent: KNOWLEDGE
+      confidence-thresholds: { }
+    jev:
+      enabled: false
+      base-url: https://api.typesafe.ai
+      api-key: ${JEV_API_KEY:}
+      model: ${JEV_MODEL:jev-1.13.0}
+      connect-timeout: 500ms
+      read-timeout: 1200ms
+      max-context-chars: 4000
+      recent-message-limit: 8
     dashscope:
       websocket-url: wss://dashscope.aliyuncs.com/api-ws/v1/inference
       tts:
