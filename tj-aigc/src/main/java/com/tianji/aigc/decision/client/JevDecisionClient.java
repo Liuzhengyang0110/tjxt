@@ -65,6 +65,7 @@ public class JevDecisionClient {
             case 401, 403 -> RouteFallbackReason.AUTH_FAILURE;
             case 422 -> RouteFallbackReason.INVALID_REQUEST;
             case 429 -> RouteFallbackReason.RATE_LIMITED;
+            case 451 -> RouteFallbackReason.REGION_UNAVAILABLE;
             case 529 -> RouteFallbackReason.OVERLOADED;
             default -> status >= 500 && status < 600
                     ? RouteFallbackReason.SERVER_ERROR

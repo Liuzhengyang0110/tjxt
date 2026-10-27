@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "approvalId": "user-20261026-consolidated-jev-usd5-report-only",
+  "runId": "jlc04-smoke-live-20261026-201850-be37aa",
+  "runPath": "D:\\Project\\Java\\tjxt\\tj-aigc\\target\\route-benchmark\\jlc04-smoke-live-20261026-201850-be37aa",
+  "manifestSha256": "9e2463c2478abd0964876f9cb98fc1a33f724f265f30b9483fb248c7651565fa",
+  "summarySha256": "b48343cf91366da191f445000734e5cbf009254ffe5a78eee78a0256833c7cec",
+  "httpAttempts": 61,
+  "jevLogicalCalls": 30,
+  "llmLogicalCalls": 31,
+  "modelContract": "jev-1.13.0 observed; qwen-plus configured, concrete response version unavailable",
+  "meaning": "Smoke collection health only, no optimization acceptance verdict"
+}

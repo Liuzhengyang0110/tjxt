@@ -1,0 +1,227 @@
+Access is denied.
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] tjxt                                                               [pom]
+[INFO] tj-common                                                          [jar]
+[INFO] tj-auth                                                            [pom]
+[INFO] tj-auth-common                                                     [jar]
+[INFO] tj-api                                                             [jar]
+[INFO] tj-auth-resource-sdk                                               [jar]
+[INFO] tj-aigc                                                            [jar]
+[INFO] 
+[INFO] --------------------------< com.tianji:tjxt >---------------------------
+[INFO] Building tjxt 1.0.0                                                [1/7]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] ------------------------< com.tianji:tj-common >------------------------
+[INFO] Building tj-common 1.0.0                                           [2/7]
+[INFO]   from tj-common\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ tj-common ---
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ tj-common ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 85 source files with javac [debug parameters release 17] to target\classes
+[INFO] ��������·���з�����һ�����������������������
+  ��ע������δ�����а�� javac ���ܻ������ע������
+  �������ٰ�����ָ����һ���������� (-processor)��
+  ��ָ��������·�� (--processor-path, --processor-module-path)��
+  ����ʽ��������ע���� (-proc:only, -proc:full)��
+  ��ʹ�� -Xlint:-options ���ش���Ϣ��
+  ��ʹ�� -proc:none ������ע������
+[WARNING] /D:/Project/Java/tjxt/tj-common/src/main/java/com/tianji/common/autoconfigure/mybatis/MybatisConfig.java:[25,34] δʹ�� @Deprecated ���ѹ�ʱ����Ŀ����ע��
+[INFO] /D:/Project/Java/tjxt/tj-common/src/main/java/com/tianji/common/utils/NumberUtils.java: D:\Project\Java\tjxt\tj-common\src\main\java\com\tianji\common\utils\NumberUtils.javaʹ�û򸲸����ѹ�ʱ�� API��
+[INFO] /D:/Project/Java/tjxt/tj-common/src/main/java/com/tianji/common/utils/NumberUtils.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+[INFO] /D:/Project/Java/tjxt/tj-common/src/main/java/com/tianji/common/autoconfigure/mvc/aspects/CheckerAspect.java: ĳЩ�����ļ�ʹ����δ�����򲻰�ȫ�Ĳ�����
+[INFO] /D:/Project/Java/tjxt/tj-common/src/main/java/com/tianji/common/autoconfigure/mvc/aspects/CheckerAspect.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ tj-common ---
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-common\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ tj-common ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ tj-common ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] -------------------------< com.tianji:tj-auth >-------------------------
+[INFO] Building tj-auth 1.0.0                                             [3/7]
+[INFO]   from tj-auth\pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] ---------------------< com.tianji:tj-auth-common >----------------------
+[INFO] Building tj-auth-common 1.0.0                                      [4/7]
+[INFO]   from tj-auth\tj-auth-common\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ tj-auth-common ---
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-auth\tj-auth-common\src\main\resources
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-auth\tj-auth-common\src\main\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ tj-auth-common ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 17] to target\classes
+[INFO] ��������·���з�����һ�����������������������
+  ��ע������δ�����а�� javac ���ܻ������ע������
+  �������ٰ�����ָ����һ���������� (-processor)��
+  ��ָ��������·�� (--processor-path, --processor-module-path)��
+  ����ʽ��������ע���� (-proc:only, -proc:full)��
+  ��ʹ�� -Xlint:-options ���ش���Ϣ��
+  ��ʹ�� -proc:none ������ע������
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ tj-auth-common ---
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-auth\tj-auth-common\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ tj-auth-common ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ tj-auth-common ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] -------------------------< com.tianji:tj-api >--------------------------
+[INFO] Building tj-api 1.0.0                                              [5/7]
+[INFO]   from tj-api\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ tj-api ---
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ tj-api ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 61 source files with javac [debug parameters release 17] to target\classes
+[INFO] ��������·���з�����һ�����������������������
+  ��ע������δ�����а�� javac ���ܻ������ע������
+  �������ٰ�����ָ����һ���������� (-processor)��
+  ��ָ��������·�� (--processor-path, --processor-module-path)��
+  ����ʽ��������ע���� (-proc:only, -proc:full)��
+  ��ʹ�� -Xlint:-options ���ش���Ϣ��
+  ��ʹ�� -proc:none ������ע������
+[INFO] /D:/Project/Java/tjxt/tj-api/src/main/java/com/tianji/api/dto/user/LoginFormDTO.java: D:\Project\Java\tjxt\tj-api\src\main\java\com\tianji\api\dto\user\LoginFormDTO.javaʹ�û򸲸����ѹ�ʱ�� API��
+[INFO] /D:/Project/Java/tjxt/tj-api/src/main/java/com/tianji/api/dto/user/LoginFormDTO.java: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ tj-api ---
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-api\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ tj-api ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ tj-api ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ------------------< com.tianji:tj-auth-resource-sdk >-------------------
+[INFO] Building tj-auth-resource-sdk 1.0.0                                [6/7]
+[INFO]   from tj-auth\tj-auth-resource-sdk\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ tj-auth-resource-sdk ---
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] Copying 2 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ tj-auth-resource-sdk ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 6 source files with javac [debug parameters release 17] to target\classes
+[INFO] ��������·���з�����һ�����������������������
+  ��ע������δ�����а�� javac ���ܻ������ע������
+  �������ٰ�����ָ����һ���������� (-processor)��
+  ��ָ��������·�� (--processor-path, --processor-module-path)��
+  ����ʽ��������ע���� (-proc:only, -proc:full)��
+  ��ʹ�� -Xlint:-options ���ش���Ϣ��
+  ��ʹ�� -proc:none ������ע������
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ tj-auth-resource-sdk ---
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-auth\tj-auth-resource-sdk\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ tj-auth-resource-sdk ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ tj-auth-resource-sdk ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] -------------------------< com.tianji:tj-aigc >-------------------------
+[INFO] Building tj-aigc 1.0.0                                             [7/7]
+[INFO]   from tj-aigc\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- spring-boot:3.3.5:build-info (default) @ tj-aigc ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ tj-aigc ---
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ tj-aigc ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 75 source files with javac [debug parameters release 17] to target\classes
+[INFO] ��������·���з�����һ�����������������������
+  ��ע������δ�����а�� javac ���ܻ������ע������
+  �������ٰ�����ָ����һ���������� (-processor)��
+  ��ָ��������·�� (--processor-path, --processor-module-path)��
+  ����ʽ��������ע���� (-proc:only, -proc:full)��
+  ��ʹ�� -Xlint:-options ���ش���Ϣ��
+  ��ʹ�� -proc:none ������ע������
+[WARNING] /D:/Project/Java/tjxt/tj-aigc/src/main/java/com/tianji/aigc/vo/TemplateVO.java:[14,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /D:/Project/Java/tjxt/tj-aigc/src/main/java/com/tianji/aigc/vo/TemplateVO.java:[17,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /D:/Project/Java/tjxt/tj-aigc/src/main/java/com/tianji/aigc/vo/TemplateVO.java:[23,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /D:/Project/Java/tjxt/tj-aigc/src/main/java/com/tianji/aigc/vo/TemplateVO.java:[29,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /D:/Project/Java/tjxt/tj-aigc/src/main/java/com/tianji/aigc/vo/TemplateVO.java:[35,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ tj-aigc ---
+[INFO] skip non existing resourceDirectory D:\Project\Java\tjxt\tj-aigc\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ tj-aigc ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 26 source files with javac [debug parameters release 17] to target\test-classes
+[INFO] ��������·���з�����һ�����������������������
+  ��ע������δ�����а�� javac ���ܻ������ע������
+  �������ٰ�����ָ����һ���������� (-processor)��
+  ��ָ��������·�� (--processor-path, --processor-module-path)��
+  ����ʽ��������ע���� (-proc:only, -proc:full)��
+  ��ʹ�� -Xlint:-options ���ش���Ϣ��
+  ��ʹ�� -proc:none ������ע������
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ tj-aigc ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.tianji.aigc.benchmark.RouteBenchmarkTest
+20:29:54.214 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=873a3245c7fd4a26a41704e68cd7e592, agent=CONSULT, source=LLM_FALLBACK, fallbackReason=TIMEOUT, model=null, latencyMs=203
+20:29:54.226 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=f922f5a0fd8741d2b3c94b1ded09ac51, agent=KNOWLEDGE, source=SAFE_DEFAULT, fallbackReason=LLM_ERROR, model=null, latencyMs=1
+20:29:54.394 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=aac52a85e9214982b2934e3c7a016fd4, agent=CONSULT, source=LLM_FALLBACK, fallbackReason=LOW_CONFIDENCE, model=null, latencyMs=8
+20:29:54.402 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=b5ecd78e589944e48dd269c619ad6c10, agent=KNOWLEDGE, source=SAFE_DEFAULT, fallbackReason=LLM_ERROR, model=null, latencyMs=1
+20:29:54.412 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=833f025cf63e48799a4b813051b8c272, agent=CONSULT, source=LLM_FALLBACK, fallbackReason=INVALID_RESPONSE, model=null, latencyMs=2
+20:29:54.421 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=54250f2f90054b5abed931a808f60c62, agent=CONSULT, source=LLM_FALLBACK, fallbackReason=LOW_CONFIDENCE, model=null, latencyMs=2
+20:29:54.428 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=d6ca8fd760db42bbbc897311121582e4, agent=CONSULT, source=LLM_FALLBACK, fallbackReason=RATE_LIMITED, model=null, latencyMs=2
+20:29:54.434 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=610a8af21f43468e9480e0bfd3a0b736, agent=CONSULT, source=LLM_PRIMARY, fallbackReason=NONE, model=null, latencyMs=1
+20:29:54.448 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=333b90a4fbbe4b90b228d83331b657c4, agent=KNOWLEDGE, source=SAFE_DEFAULT, fallbackReason=LLM_ERROR, model=null, latencyMs=2
+20:29:54.973 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=dd632a6e11cc4c7db2e87997e93f9638, agent=KNOWLEDGE, source=SAFE_DEFAULT, fallbackReason=LLM_ERROR, model=null, latencyMs=1
+20:29:54.979 INFO  c.t.aigc.decision.service.impl.FallbackRouteDecisionService - route decision: routeRequestId=afd8c6f0f59f4e4890bbe2438e507833, agent=CONSULT, source=JEV, fallbackReason=NONE, model=synthetic-fixed-jev, latencyMs=1
+[INFO] Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.079 s -- in com.tianji.aigc.benchmark.RouteBenchmarkTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 21, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for tjxt 1.0.0:
+[INFO] 
+[INFO] tjxt ............................................... SUCCESS [  0.004 s]
+[INFO] tj-common .......................................... SUCCESS [  6.580 s]
+[INFO] tj-auth ............................................ SUCCESS [  0.002 s]
+[INFO] tj-auth-common ..................................... SUCCESS [  1.137 s]
+[INFO] tj-api ............................................. SUCCESS [  2.874 s]
+[INFO] tj-auth-resource-sdk ............................... SUCCESS [  1.120 s]
+[INFO] tj-aigc ............................................ SUCCESS [ 11.469 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  23.862 s
+[INFO] Finished at: 2026-10-26T20:29:55+08:00
+[INFO] ------------------------------------------------------------------------

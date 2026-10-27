@@ -1,0 +1,10 @@
+{
+  "mode": "SYNTHETIC",
+  "runId": "jlc02-synthetic-fixture-v1",
+  "stage": "smoke",
+  "rounds": 1,
+  "warmupsPerVariantPerRound": 0,
+  "seed": 20261026,
+  "interCallDelayMs": 0,
+  "routeTimeoutMs": 30000
+}

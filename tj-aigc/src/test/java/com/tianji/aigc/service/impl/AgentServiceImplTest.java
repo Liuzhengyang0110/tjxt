@@ -121,6 +121,47 @@ class AgentServiceImplTest {
         return agent;
     }
 
+    @Test
+    void routeExceptionProducesFriendlyErrorAndStopInsteadOfEscapingToMvc() {
+        AgentServiceImpl service = new AgentServiceImpl(routeDecisionService, List.of());
+        when(routeDecisionService.decide("问题", "会话")).thenThrow(new IllegalStateException("route failed"));
+
+        assertFriendlyErrorAndStop(service.chat("问题", "会话").collectList().block());
+    }
+
+    @Test
+    void agentSetupExceptionProducesFriendlyErrorAndStop() {
+        Agent recommend = agent(AgentTypeEnum.RECOMMEND);
+        AgentServiceImpl service = new AgentServiceImpl(routeDecisionService, List.of(recommend));
+        when(routeDecisionService.decide("问题", "会话")).thenReturn(decision(AgentTypeEnum.RECOMMEND));
+        when(recommend.processStream("问题", "会话")).thenThrow(new IllegalStateException("tool setup failed"));
+
+        assertFriendlyErrorAndStop(service.chat("问题", "会话").collectList().block());
+    }
+
+    @Test
+    void asynchronousAgentErrorKeepsPartialReplyAndEndsWithStop() {
+        Agent recommend = agent(AgentTypeEnum.RECOMMEND);
+        AgentServiceImpl service = new AgentServiceImpl(routeDecisionService, List.of(recommend));
+        ChatEventVO partial = ChatEventVO.builder().eventType(1001).eventData("部分回答").build();
+        when(routeDecisionService.decide("问题", "会话")).thenReturn(decision(AgentTypeEnum.RECOMMEND));
+        when(recommend.processStream("问题", "会话")).thenReturn(
+                Flux.concat(Flux.just(partial), Flux.error(new IllegalStateException("upstream failed"))));
+
+        List<ChatEventVO> events = service.chat("问题", "会话").collectList().block();
+
+        assertEquals(3, events.size());
+        assertSame(partial, events.get(0));
+        assertFriendlyErrorAndStop(events.subList(1, 3));
+    }
+
+    private void assertFriendlyErrorAndStop(List<ChatEventVO> events) {
+        assertEquals(2, events.size());
+        assertEquals(ChatEventTypeEnum.DATA.getValue(), events.get(0).getEventType());
+        assertEquals("抱歉，当前服务暂时不可用，请稍后重试。", events.get(0).getEventData());
+        assertSame(AbstractAgent.STOP_EVENT, events.get(1));
+    }
+
     private RouteDecision decision(AgentTypeEnum type) {
         return new RouteDecision(type, null, Map.of(),
                 RouteDecisionSource.LLM_PRIMARY, RouteFallbackReason.NONE, null);

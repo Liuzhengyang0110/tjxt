@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "protectedFilesUnchanged": 21,
+  "strictArchiveReports": {
+    "smoke": "COMPLETE",
+    "firstFormal": "INCOMPLETE",
+    "mainFormal": "COMPLETE"
+  },
+  "independentQuantileAccuracyCallChecks": "PASS",
+  "credentialLiteralScan": "PASS",
+  "totalLiveCounters": {
+    "routes": 2623,
+    "warmups": 100,
+    "jevCallCount": 1312,
+    "llmCallCount": 1362,
+    "httpAttemptCount": 2674
+  },
+  "acceptance": "NOT_EVALUATED",
+  "reason": "USER_REPORT_ONLY",
+  "mainSummarySha256": "3d7dcfe834c40d43e7a7cdacb7f6190d6cc6aa6cb68fb94597d614cfd35c0aab",
+  "inventorySha256": "a2c8ecee732c4ef731feb1ce367f91401ebcc19ed05bcf6052d14066e833ccdc",
+  "localDocumentLinksChecked": 37,
+  "archiveInventoryFilesVerified": 47,
+  "reportResumeMetrics": "PASS",
+  "editableHtmlFontsColors": "PASS",
+  "externalHtmlAssets": 0,
+  "deliverables": {
+    "测试报告.md": "3eab480d2d28ee8bc6783ca9df626f83d443028555214cf95f1467d7d326c5e3",
+    "简历表述.md": "63085ff935feec0221cfb9aa79afa917bc99303f7853478d7b074e403cc45b6a",
+    "证据索引.md": "b10cbd243aa526ff3304e31ccf11a7cf448b1ff34895421020884c1a3a53ff3c"
+  }
+}

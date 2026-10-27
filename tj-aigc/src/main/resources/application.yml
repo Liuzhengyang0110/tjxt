@@ -38,7 +38,7 @@ tj:
       safe-default-agent: KNOWLEDGE
       confidence-thresholds: { }
     jev:
-      enabled: false
+      enabled: true
       base-url: https://api.typesafe.ai
       api-key: ${JEV_API_KEY:}
       model: ${JEV_MODEL:jev-1.13.0}
@@ -46,6 +46,10 @@ tj:
       read-timeout: 1200ms
       max-context-chars: 4000
       recent-message-limit: 8
+      proxy:
+        enabled: ${JEV_PROXY_ENABLED:false}
+        host: ${JEV_PROXY_HOST:127.0.0.1}
+        port: ${JEV_PROXY_PORT:7890}
     dashscope:
       websocket-url: wss://dashscope.aliyuncs.com/api-ws/v1/inference
       tts:
@@ -83,5 +87,5 @@ tj:
     memory:
       max: 100
       type: Redis # Redis / Mysql
-    chat-type: ENHANCE # ROUTE / ENHANCE / APP
+    chat-type: ROUTE # ROUTE / ENHANCE / APP
     user-id: 9999

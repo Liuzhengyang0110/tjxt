@@ -1,0 +1,208 @@
+{
+  "protocolId": "jlc-protocol-v1",
+  "datasetSha256": "8e2addb8b5b5cb561c44e89cb1593f3c5fcd6367085d79008a9acd0fddcecfd2",
+  "sampleIds": [
+    "route-0002-b",
+    "route-0015-a",
+    "route-0028-a",
+    "route-0041-a",
+    "route-0054-a",
+    "route-0055-a",
+    "route-0056-a",
+    "route-0058-a",
+    "route-0067-a",
+    "route-0068-a",
+    "route-0069-a",
+    "route-0071-a",
+    "route-0077-a",
+    "route-0083-a",
+    "route-0087-a",
+    "route-0089-a",
+    "route-0095-a",
+    "route-0102-a",
+    "route-0103-a",
+    "route-0104-a"
+  ],
+  "samples": [
+    {
+      "sampleId": "route-0002-b",
+      "expectedAgent": "RECOMMEND",
+      "scenarioGroupId": "route-0002",
+      "split": "development",
+      "tags": [
+        "clear"
+      ]
+    },
+    {
+      "sampleId": "route-0015-a",
+      "expectedAgent": "CONSULT",
+      "scenarioGroupId": "route-0015",
+      "split": "development",
+      "tags": [
+        "clear"
+      ]
+    },
+    {
+      "sampleId": "route-0028-a",
+      "expectedAgent": "BUY",
+      "scenarioGroupId": "route-0028",
+      "split": "development",
+      "tags": [
+        "clear"
+      ]
+    },
+    {
+      "sampleId": "route-0041-a",
+      "expectedAgent": "KNOWLEDGE",
+      "scenarioGroupId": "route-0041",
+      "split": "development",
+      "tags": [
+        "clear"
+      ]
+    },
+    {
+      "sampleId": "route-0054-a",
+      "expectedAgent": "CONSULT",
+      "scenarioGroupId": "route-0054",
+      "split": "development",
+      "tags": [
+        "boundary"
+      ]
+    },
+    {
+      "sampleId": "route-0055-a",
+      "expectedAgent": "RECOMMEND",
+      "scenarioGroupId": "route-0055",
+      "split": "development",
+      "tags": [
+        "boundary"
+      ]
+    },
+    {
+      "sampleId": "route-0056-a",
+      "expectedAgent": "KNOWLEDGE",
+      "scenarioGroupId": "route-0056",
+      "split": "development",
+      "tags": [
+        "boundary"
+      ]
+    },
+    {
+      "sampleId": "route-0058-a",
+      "expectedAgent": "BUY",
+      "scenarioGroupId": "route-0058",
+      "split": "development",
+      "tags": [
+        "boundary"
+      ]
+    },
+    {
+      "sampleId": "route-0067-a",
+      "expectedAgent": "CONSULT",
+      "scenarioGroupId": "route-0067",
+      "split": "development",
+      "tags": [
+        "reference"
+      ]
+    },
+    {
+      "sampleId": "route-0068-a",
+      "expectedAgent": "BUY",
+      "scenarioGroupId": "route-0068",
+      "split": "development",
+      "tags": [
+        "reference"
+      ]
+    },
+    {
+      "sampleId": "route-0069-a",
+      "expectedAgent": "RECOMMEND",
+      "scenarioGroupId": "route-0069",
+      "split": "development",
+      "tags": [
+        "reference"
+      ]
+    },
+    {
+      "sampleId": "route-0071-a",
+      "expectedAgent": "KNOWLEDGE",
+      "scenarioGroupId": "route-0071",
+      "split": "development",
+      "tags": [
+        "reference"
+      ]
+    },
+    {
+      "sampleId": "route-0077-a",
+      "expectedAgent": "RECOMMEND",
+      "scenarioGroupId": "route-0077",
+      "split": "development",
+      "tags": [
+        "colloquial"
+      ]
+    },
+    {
+      "sampleId": "route-0083-a",
+      "expectedAgent": "BUY",
+      "scenarioGroupId": "route-0083",
+      "split": "development",
+      "tags": [
+        "typo"
+      ]
+    },
+    {
+      "sampleId": "route-0087-a",
+      "expectedAgent": "RECOMMEND",
+      "scenarioGroupId": "route-0087",
+      "split": "holdout",
+      "tags": [
+        "multiIntent"
+      ]
+    },
+    {
+      "sampleId": "route-0089-a",
+      "expectedAgent": "BUY",
+      "scenarioGroupId": "route-0089",
+      "split": "development",
+      "tags": [
+        "multiIntent"
+      ]
+    },
+    {
+      "sampleId": "route-0095-a",
+      "expectedAgent": "KNOWLEDGE",
+      "scenarioGroupId": "route-0095",
+      "split": "development",
+      "tags": [
+        "insufficient"
+      ]
+    },
+    {
+      "sampleId": "route-0102-a",
+      "expectedAgent": "CONSULT",
+      "scenarioGroupId": "route-0102",
+      "split": "development",
+      "tags": [
+        "injection"
+      ]
+    },
+    {
+      "sampleId": "route-0103-a",
+      "expectedAgent": "RECOMMEND",
+      "scenarioGroupId": "route-0103",
+      "split": "development",
+      "tags": [
+        "injection"
+      ]
+    },
+    {
+      "sampleId": "route-0104-a",
+      "expectedAgent": "KNOWLEDGE",
+      "scenarioGroupId": "route-0104",
+      "split": "development",
+      "tags": [
+        "injection"
+      ]
+    }
+  ]
+}

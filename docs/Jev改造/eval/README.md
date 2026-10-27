@@ -30,6 +30,14 @@ python 'docs/Jev改造/eval/route_eval.py' run --jev-live
 
 可用 `JEV_MODEL` 和 `JEV_BASE_URL` 覆盖模型和地址。默认模型为项目当前配置的 `jev-1.13.0`。如需计算美元成本，请按实际账单价传入 `--jev-input-usd-per-million` 和 `--jev-output-usd-per-million`；未提供单价时成本保持 `null`，不猜测价格。
 
+### Java 与 Python 的网络出口
+
+Python 评测使用 `urllib`，可能读取操作系统或环境变量中的代理；Java Jev 客户端不应被假定使用相同代理。Java 支持独立的 `tj.ai.jev.proxy.enabled/host/port` 配置，对应 `JEV_PROXY_ENABLED`、`JEV_PROXY_HOST`、`JEV_PROXY_PORT`。它只作用于 Jev，不修改 Nacos、Redis、Feign 等组件的 JVM 全局代理。使用的是 **HTTP 代理端口**（支持 HTTPS CONNECT），不是 SOCKS 端口；当前不支持代理账号密码认证。
+
+基础配置默认关闭代理；`local` 配置为当前联调默认开启 `127.0.0.1:7890`，需先启动本机代理，修改后重启 AIGC 服务。无需代理时设置 `JEV_PROXY_ENABLED=false`。部署到容器或远程服务器时，`127.0.0.1` 指向容器或服务器本身，不能直接复用开发机地址。
+
+HTTP 451 在 Java 和 Python 中均记录为 `REGION_UNAVAILABLE`；这是服务商的可用地区限制，不应通过更换提示词、降低置信度或反复重试解决。应确认账号、实际服务地区与网络出口符合服务商条款；代理配置本身不保证服务可用。重启后发送新问题，确认路由日志 `source=JEV`；`source=LLM_FALLBACK` 表示仍然回退，需结合 `fallbackReason` 排查。Jev 只选择后续业务 Agent，最终回答仍由业务模型生成。
+
 原 RouteAgent 的结果从独立 JSONL 文件导入，每行格式如下。`id` 必须与标注集一致，`agent` 为四种 Agent 之一；失败时可以用 `error` 代替。`latencyMs` 和 `costUsd` 可选，缺失则对应指标为 `null`。
 
 ```json

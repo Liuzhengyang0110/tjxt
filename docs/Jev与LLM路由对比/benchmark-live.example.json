@@ -1,0 +1,36 @@
+{
+  "mode": "DRY_RUN",
+  "runId": "REPLACE_WITH_NEW_RUN_ID",
+  "stage": "smoke",
+  "rounds": 1,
+  "warmupsPerVariantPerRound": 10,
+  "seed": 20261026,
+  "interCallDelayMs": 250,
+  "routeTimeoutMs": 30000,
+  "authorization": {"approved": false, "reference": ""},
+  "baselineConfigConfirmed": false,
+  "routePromptPath": "",
+  "promptReviewed": false,
+  "llm": {
+    "model": "UNCONFIGURED_ACTUAL_BASELINE_REQUIRED",
+    "baseUrl": "https://dashscope.aliyuncs.com",
+    "connectTimeoutMs": 5000,
+    "readTimeoutMs": 20000,
+    "retryMaxAttempts": 10,
+    "retryInitialIntervalMs": 2000,
+    "retryMultiplier": 5,
+    "retryMaxIntervalMs": 180000,
+    "proxyEnabled": false
+  },
+  "jev": {
+    "model": "jev-1.13.0",
+    "baseUrl": "https://api.typesafe.ai",
+    "connectTimeoutMs": 500,
+    "readTimeoutMs": 1200,
+    "proxyEnabled": false,
+    "proxyHost": "127.0.0.1",
+    "proxyPort": 7890
+  },
+  "limits": {"routeCalls": 0, "jevLogicalCalls": 0, "llmLogicalCalls": 0, "httpAttempts": 0},
+  "budget": {"policy": "", "currency": null, "amount": null, "externalAccountHardCapConfirmed": false}
+}

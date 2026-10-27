@@ -69,7 +69,7 @@ public class FallbackRouteDecisionService implements RouteDecisionService {
             return decideInShadow(question, sessionId, routeRequestId);
         }
         if (routeProperties.getProvider() == RouteProvider.LLM) {
-            return llmService.decide(question, sessionId);
+            return decideWithPrimaryLlm(question, sessionId);
         }
         if (!jevProperties.isEnabled()) {
             return fallbackToLlm(question, sessionId, RouteFallbackReason.JEV_DISABLED);
@@ -114,10 +114,13 @@ public class FallbackRouteDecisionService implements RouteDecisionService {
             state = contextBuilder.build(question, sessionId);
         } catch (RuntimeException e) {
             log.warn("jev shadow skipped: routeRequestId={}, reason=context_build_failed", routeRequestId);
-            return llmService.decide(question, sessionId);
+            return decideWithPrimaryLlm(question, sessionId);
         }
 
-        RouteDecision actual = llmService.decide(question, sessionId);
+        RouteDecision actual = decideWithPrimaryLlm(question, sessionId);
+        if (actual.source() == RouteDecisionSource.SAFE_DEFAULT) {
+            return actual;
+        }
         try {
             shadowService.compareAsync(routeRequestId, hashSession(sessionId), state, actual);
         } catch (TaskRejectedException e) {
@@ -133,6 +136,23 @@ public class FallbackRouteDecisionService implements RouteDecisionService {
         return DigestUtil.sha256Hex(sessionId == null ? "" : sessionId).substring(0, 16);
     }
 
+    private RouteDecision decideWithPrimaryLlm(String question, String sessionId) {
+        try {
+            return validLlmDecision(question, sessionId);
+        } catch (RuntimeException e) {
+            routeMetrics.recordDecisionError(RouteFallbackReason.LLM_ERROR);
+            return safeDefault(RouteFallbackReason.LLM_ERROR);
+        }
+    }
+
+    private RouteDecision validLlmDecision(String question, String sessionId) {
+        RouteDecision decision = llmService.decide(question, sessionId);
+        if (decision == null || decision.agentType() == null || decision.agentType() == AgentTypeEnum.ROUTE) {
+            throw new IllegalStateException("Invalid LLM route decision");
+        }
+        return decision;
+    }
+
     private RouteDecision fallbackToLlm(
             String question,
             String sessionId,
@@ -143,10 +163,7 @@ public class FallbackRouteDecisionService implements RouteDecisionService {
         }
 
         try {
-            RouteDecision llm = llmService.decide(question, sessionId);
-            if (llm == null || llm.agentType() == null || llm.agentType() == AgentTypeEnum.ROUTE) {
-                throw new IllegalStateException("Invalid LLM route decision");
-            }
+            RouteDecision llm = validLlmDecision(question, sessionId);
             return new RouteDecision(
                     llm.agentType(),
                     null,

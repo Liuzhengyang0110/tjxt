@@ -1,0 +1,4 @@
+# Preserve original evidence bytes so archived SHA-256 values survive checkout.
+** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+# Frozen prompts and logs retain meaningful/original trailing spaces as evidence.
+实测证据/** -whitespace

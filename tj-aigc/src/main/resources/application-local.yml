@@ -33,12 +33,14 @@ logging:
 #            http:
 #              wire: debug
 
-# 本地 Shadow 联调还需设置 TJ_AI_CHAT_TYPE=ROUTE 和 JEV_API_KEY。
-# 默认保持关闭，避免普通本地启动产生 Jev 外部请求。
+# 本地 Jev 联调需设置 JEV_API_KEY，并保持 chat-type=ROUTE。
+# 本机 HTTP 代理需监听 127.0.0.1:7890；无需代理时设置 JEV_PROXY_ENABLED=false。
 tj:
   ai:
     route:
-      provider: LLM
+      provider: JEV # JEV / LLM
       shadow-enabled: ${JEV_SHADOW_ENABLED:false}
     jev:
-      enabled: ${JEV_ENABLED:false}
+      enabled: ${JEV_ENABLED:true}
+      proxy:
+        enabled: ${JEV_PROXY_ENABLED:true}

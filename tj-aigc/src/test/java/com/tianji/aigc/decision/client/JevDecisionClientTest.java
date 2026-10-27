@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -104,6 +106,7 @@ class JevDecisionClientTest {
                 403, RouteFallbackReason.AUTH_FAILURE,
                 422, RouteFallbackReason.INVALID_REQUEST,
                 429, RouteFallbackReason.RATE_LIMITED,
+                451, RouteFallbackReason.REGION_UNAVAILABLE,
                 529, RouteFallbackReason.OVERLOADED,
                 500, RouteFallbackReason.SERVER_ERROR,
                 418, RouteFallbackReason.UNKNOWN_ERROR
@@ -117,6 +120,44 @@ class JevDecisionClientTest {
             assertFalse(exception.getMessage().contains("test-key"));
         }
         assertEquals(cases.size(), requests.get());
+    }
+
+    @Test
+    void sendsRequestViaConfiguredProxyWithoutChangingJvmDefault() throws IOException {
+        AtomicReference<String> target = new AtomicReference<>();
+        startServer(exchange -> {
+            target.set(exchange.getRequestURI().toString());
+            exchange.getRequestBody().readAllBytes();
+            sendResponse(exchange, 200, RESPONSE_JSON);
+        });
+        ProxySelector defaultProxy = ProxySelector.getDefault();
+        JevProperties properties = properties();
+        // This origin cannot resolve; only the local fake proxy can answer the request.
+        properties.setBaseUrl("http://jev-origin.invalid");
+        properties.getProxy().setEnabled(true);
+        properties.getProxy().setHost("127.0.0.1");
+        properties.getProxy().setPort(server.getAddress().getPort());
+
+        var response = client(properties).evaluate(state());
+
+        assertEquals("http://jev-origin.invalid/v1/systemone", target.get());
+        assertEquals("CONSULT", response.answers().get("route_agent").choice());
+        assertSame(defaultProxy, ProxySelector.getDefault());
+    }
+
+    @Test
+    void rejectsInvalidEnabledProxyBeforeCallingHttp() {
+        JevProperties properties = properties();
+        assertFalse(properties.getProxy().isEnabled());
+        properties.getProxy().setEnabled(true);
+        properties.getProxy().setHost(" ");
+        assertThrows(IllegalArgumentException.class, () -> client(properties));
+
+        properties.getProxy().setHost("127.0.0.1");
+        for (int port : List.of(-1, 0, 65536)) {
+            properties.getProxy().setPort(port);
+            assertThrows(IllegalArgumentException.class, () -> client(properties));
+        }
     }
 
     @Test

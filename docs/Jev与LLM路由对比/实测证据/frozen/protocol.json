@@ -1,0 +1,264 @@
+{
+  "protocolId": "jlc-protocol-v1",
+  "protocolVersion": "1.0",
+  "schemaVersion": "route-benchmark-v1",
+  "taskId": "JLC-01",
+  "createdDate": "2026-10-26",
+  "timezone": "Asia/Shanghai",
+  "documentStatus": "DOC_COMPLETE",
+  "staticValidation": "PASS",
+  "live": "NOT_RUN",
+  "authorization": {
+    "localImplementation": "AUTHORIZED_BY_USER",
+    "live": "PENDING",
+    "acceptanceCriteria": "PENDING",
+    "businessLabelReview": "PENDING"
+  },
+  "environmentLevel": "ISOLATED_JAVA_ROUTE",
+  "extensionEnvironmentLevel": "APPLICATION_ROUTE",
+  "extensionStatus": "NOT_AUTHORIZED",
+  "git": {
+    "branch": "jev-routing",
+    "head": "90a3f044bc586066dd1fc6796184d5ef8432fd82",
+    "dirty": true,
+    "baselineIncludesWorkingTree": true
+  },
+  "sourceSha256": {
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/service/impl/FallbackRouteDecisionService.java": "fc79943cc821c8854d401971d1b1ee77b1d6d3d9344ea107f51081a29e323cc2",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/service/impl/LlmRouteDecisionService.java": "fa0247163614c84fcb6c5902c63a8444e53af3246e8b1d82dffd2b1b4bc6cba6",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/service/impl/JevRouteDecisionService.java": "fe4cd70b0c2eca18789e89df68bdc8f61ae25fd41472388ed9e2e70b44e05bd0",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/context/RoutingContextBuilder.java": "06f94d0a773f893dd55105882d6ead27a676d5f42e32cb5c57b1dd72e9c2d354",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/config/RouteProperties.java": "3cfa96214fc3d84b4a476bbd945acbb99d6358000086e312c19fd1c1b071f300",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/config/JevProperties.java": "ceb40c0b31acbfbc1cb891ea28193b8a2e8f8a9bef1ff12de62976749ce67b20",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/client/JevDecisionClient.java": "0eb18c2fb6eaa2f2fe6be0d3b6b1c12e79136b5a6c5ac719b309b154f2bf2c08",
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/config/JevClientConfig.java": "bc999938d7e281bad22c55d8a4b332846246ece9214faaf6a37aec30524b3b76",
+    "tj-aigc/src/main/java/com/tianji/aigc/agent/RouteAgent.java": "1f76e28797d9c1997b1a45b18fcb1df529b284c0e4cb2b0de7d728236dd6d963",
+    "tj-aigc/src/main/java/com/tianji/aigc/agent/AbstractAgent.java": "8bf1fe6b49a7bcf4e1db772e0352602b9d64d6409df693486398797ed8eeb72b",
+    "tj-aigc/src/main/java/com/tianji/aigc/config/SpringAIConfig.java": "a04f6cc341fda1debdf2276a7fa33cd06225fc7060d4674ea1a22f3f98c92c56",
+    "tj-aigc/src/main/java/com/tianji/aigc/config/SystemPromptConfig.java": "ecae93d47a6eccc81e127f20d812d6a6ed7b905e4af9d0cba3dce167f5ffe061",
+    "tj-aigc/src/main/java/com/tianji/aigc/advisor/RecordOptimizationAdvisor.java": "41f49a5259ae5cbcafb761fa3952f316d1acb4a331bdcf193a808a08f7287948",
+    "tj-aigc/src/main/java/com/tianji/aigc/memory/MyChatMemoryRepository.java": "064d325ed2eb13ee604e12ec444be9534ca72f31214a107afd7dc2a8b7305b4c",
+    "tj-aigc/src/main/resources/application.yml": "306f2a3d887df13659a49c5f85c32a8dad7cfdae4849806409b3dcd79aa0596f",
+    "tj-aigc/src/main/resources/application-local.yml": "9491a6c346af07f1e4fe60f429a678d3a64f065e1bfda070fcd9753bc7f948aa",
+    "docs/Jev改造/eval/route_eval.py": "d3fcc639aacc02eb3f0e19d7280f2cf0944f960884548d60e409154b91b63243",
+    "docs/Jev改造/eval/README.md": "cfee89730aefead6fb494f11ad9599b281ca4e345cda30e6281ed5d8fb0ff66c"
+  },
+  "dataset": {
+    "path": "docs/Jev改造/eval/route-eval-v1.jsonl",
+    "sha256": "8e2addb8b5b5cb561c44e89cb1593f3c5fcd6367085d79008a9acd0fddcecfd2",
+    "sampleCount": 413,
+    "scenarioGroupCount": 104,
+    "labelChanges": 0,
+    "splitAlgorithm": "sha256(scenarioGroupId UTF-8), unsigned big-endian first 4 bytes % 5 == 0 => holdout else development",
+    "developmentCount": 353,
+    "holdoutCount": 60,
+    "policyPendingSampleCount": 16,
+    "policyPendingGroupIds": [
+      "route-0030",
+      "route-0087",
+      "route-0088",
+      "route-0096"
+    ]
+  },
+  "smokeIdsPath": "docs/Jev与LLM路由对比/smoke-ids.json",
+  "variants": [
+    {
+      "variant": "LLM_PRIMARY",
+      "configId": "llm-primary-v1",
+      "provider": "LLM",
+      "shadowEnabled": false,
+      "fallbackEnabled": true
+    },
+    {
+      "variant": "JEV_WITH_FALLBACK",
+      "configId": "jev-fallback-085-v1",
+      "provider": "JEV",
+      "shadowEnabled": false,
+      "fallbackEnabled": true,
+      "jevEnabled": true,
+      "defaultConfidenceThreshold": 0.85,
+      "confidenceThresholds": {}
+    }
+  ],
+  "effectiveRuntimeConfig": {
+    "jevModel": null,
+    "llmModel": null,
+    "llmOptions": null,
+    "routeDynamicPromptSha256": null,
+    "routeFinalPromptSha256": null,
+    "jevProxy": null,
+    "llmTimeout": null,
+    "sdkRetry": null,
+    "logging": null
+  },
+  "staticParameters": {
+    "jevModelDefault": "jev-1.13.0",
+    "jevConnectTimeoutMs": 500,
+    "jevReadTimeoutMs": 1200,
+    "jevMaxContextChars": 4000,
+    "jevRecentMessageLimit": 8,
+    "llmMemoryMaxMessages": 100,
+    "safeDefaultAgent": "KNOWLEDGE",
+    "baseProvider": "LLM",
+    "localProvider": "JEV",
+    "buyThresholdOverride": null
+  },
+  "timing": {
+    "clock": "System.nanoTime",
+    "unit": "milliseconds_double",
+    "entry": "FallbackRouteDecisionService.decide",
+    "includeErrors": true,
+    "includeFallback": true,
+    "exclude": [
+      "historySetup",
+      "sessionCleanup",
+      "diskWrite",
+      "interCallWait"
+    ],
+    "unknownLatency": null
+  },
+  "schedule": {
+    "seed": 20261026,
+    "concurrency": 1,
+    "formalRounds": 3,
+    "smokeRounds": 1,
+    "warmupsPerVariantPerRound": 10,
+    "interCallDelayMs": 250,
+    "shuffleSeed": "seed + round (round starts at 1)",
+    "pairOrder": "alternate AB/BA by shuffled pair index + round parity",
+    "A": "LLM_PRIMARY",
+    "B": "JEV_WITH_FALLBACK",
+    "orderIndexStart": 0,
+    "warmupSampleId": "warmup-r{round}-{variant}-{ordinal02}",
+    "persistBeforeCalling": true,
+    "algorithmAndLanguageMustBeRecorded": true
+  },
+  "budgetProposal": {
+    "approval": "PENDING",
+    "smokeRouteCountIncludingWarmup": 60,
+    "formalRouteCountIncludingWarmup": 2538,
+    "totalRouteCount": 2598,
+    "maxJevLogicalCalls": 1299,
+    "maxLlmLogicalCalls": 2598,
+    "maxTotalVendorLogicalCalls": 3897,
+    "maxHttpAttempts": null,
+    "sdkRetriesIncluded": false,
+    "currency": null,
+    "amount": null,
+    "maxTokens": null,
+    "unitPrices": null,
+    "autoRerunAllowance": 0
+  },
+  "recordContract": {
+    "requiredFields": [
+      "schemaVersion",
+      "runId",
+      "configId",
+      "environmentLevel",
+      "round",
+      "sampleId",
+      "variant",
+      "orderIndex",
+      "pairOrder",
+      "warmup",
+      "expectedAgent",
+      "actualAgent",
+      "source",
+      "fallbackReason",
+      "confidence",
+      "latencyMs",
+      "status",
+      "errorType",
+      "jevModel",
+      "llmModel",
+      "jevCallCount",
+      "llmCallCount",
+      "startedAt",
+      "finishedAt"
+    ],
+    "additionalFields": [
+      "mode",
+      "scenarioGroupId",
+      "split",
+      "tags",
+      "inputSampleId",
+      "jevMs",
+      "llmMs",
+      "httpAttemptCount",
+      "retryCount"
+    ],
+    "uniqueKey": [
+      "runId",
+      "configId",
+      "round",
+      "sampleId",
+      "variant",
+      "warmup"
+    ],
+    "status": [
+      "OK",
+      "SAFE_DEFAULT",
+      "ERROR",
+      "INTERRUPTED"
+    ],
+    "source": [
+      "LLM_PRIMARY",
+      "JEV",
+      "LLM_FALLBACK",
+      "SAFE_DEFAULT"
+    ],
+    "mode": [
+      "DRY_RUN",
+      "LIVE",
+      "SYNTHETIC"
+    ],
+    "nullAllowedWhenUnknown": [
+      "actualAgent",
+      "source",
+      "fallbackReason",
+      "confidence",
+      "errorType",
+      "jevModel",
+      "llmModel",
+      "latencyMs",
+      "finishedAt",
+      "jevMs",
+      "llmMs",
+      "httpAttemptCount",
+      "retryCount"
+    ],
+    "callCountLevel": "actual logical service/client invocations; do not infer solely from final source",
+    "latencyMissingIsNotZero": true
+  },
+  "statistics": {
+    "quantile": "nearest-rank ceil(p*n)",
+    "latencyPopulation": "all completed precise durations including ended errors and SAFE_DEFAULT",
+    "primaryAccuracy": "OK-and-correct / planned formal requests",
+    "safeDefaultCountsAsCorrect": false,
+    "missingCountsAsIncorrect": true,
+    "separateWarmup": true,
+    "separateMode": true,
+    "separateEnvironmentAndConfig": true,
+    "overallQuantile": "recompute from raw observations",
+    "splitAndComplexitySlices": true,
+    "incompleteCannotPass": true
+  },
+  "acceptanceProposal": {
+    "approval": "PENDING",
+    "p50Improvement": "greater_than_zero",
+    "p95Improvement": "greater_than_zero",
+    "maxAccuracyDropPercentagePoints": 1,
+    "buyRecallMustNotDecline": true,
+    "finalErrorRateMustNotIncrease": true,
+    "safeDefaultRateMustNotIncrease": true
+  },
+  "pendingLiveInputs": [
+    "authorized environment and providers",
+    "actual LLM model/options",
+    "reviewed dynamic route prompt local snapshot",
+    "safe credentials injection",
+    "network/proxy/timeouts/retry settings",
+    "route/logical/HTTP/token/currency budget caps",
+    "acceptance criteria and disputed labels policy"
+  ]
+}

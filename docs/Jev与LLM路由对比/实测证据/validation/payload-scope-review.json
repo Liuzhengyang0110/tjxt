@@ -1,0 +1,52 @@
+{
+  "purpose": "Payload-scope review following automatic approval rejection; not permission bypass",
+  "datasetPath": "docs/Jev改造/eval/route-eval-v1.jsonl",
+  "datasetSha256": "8e2addb8b5b5cb561c44e89cb1593f3c5fcd6367085d79008a9acd0fddcecfd2",
+  "datasetProvenance": "Repository README states manually constructed starter samples, not real production distribution",
+  "rowCount": 413,
+  "fieldsSent": [
+    "current synthetic question",
+    "synthetic recent user/assistant history",
+    "static routing instructions and four category criteria"
+  ],
+  "fieldsNotSent": [
+    "expected label",
+    "sample notes",
+    "sample review",
+    "user identity",
+    "stored session records",
+    "database content",
+    "Nacos config",
+    "API keys inside payload"
+  ],
+  "destinationHosts": [
+    "api.typesafe.ai",
+    "dashscope.aliyuncs.com"
+  ],
+  "network": "Jev through approved local HTTP proxy; DashScope direct",
+  "maxQuestionAndHistoryCharacters": 62,
+  "patternFindingSampleIds": {
+    "mobilePhone": [],
+    "email": [],
+    "nationalId": [],
+    "credentialLike": [],
+    "privateIPv4": [],
+    "paymentCardLike": []
+  },
+  "dynamicPromptCharacters": 449,
+  "dynamicPromptPatternFindings": {
+    "mobilePhone": false,
+    "email": false,
+    "nationalId": false,
+    "credentialLike": false,
+    "privateIPv4": false,
+    "paymentCardLike": false
+  },
+  "scopeAuthorization": "User explicitly selected approved models, existing credentials/proxy, and 413 original labels for real route-only testing; no live business session history is accessed",
+  "reviewLimits": "Pattern checks alone cannot establish absence of all sensitive content; dataset semantic review and prompt inspection also apply",
+  "realRequestsIssued": 0,
+  "dynamicPromptNormalizedTextSha256": "23f65aafb51884aafb1a8bd9818eb2d1b33fcefe42fcbaf7a0068ccb74dcdafd",
+  "dynamicPromptFileSha256": "539446f25a3188ead5546407c6a0d81dfc8a081994aebdc782d4149bdcdd1949",
+  "semanticPromptReview": "Generic intent classifier instructions with six artificial examples; no account configuration, real person, personal identifier, proprietary document, or credential is included.",
+  "semanticDatasetReview": "JLC-01 reviewed all 104 synthetic scenario groups; 413 variants, at most 62 question/history characters per case; no production traffic or database records."
+}

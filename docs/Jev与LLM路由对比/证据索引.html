@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>证据索引</title><style>
+:root { color-scheme: light; }
+* { color: #000000 !important; box-sizing: border-box; }
+body { margin: 0; background: #ffffff; font-family: "SimSun", "宋体", serif; font-size: 16px; line-height: 1.85; }
+main { max-width: 1140px; margin: 0 auto; padding: 48px 52px 80px; }
+h1,h2,h3,h4,h5,h6,th,caption,nav { font-family: "SimHei", "黑体", sans-serif; }
+h1 { font-size: 30px; line-height: 1.5; margin: 0 0 24px; padding-bottom: 18px; border-bottom: 2px solid #000000; }
+h2 { font-size: 23px; line-height: 1.55; margin: 42px 0 16px; padding: 9px 0; border-bottom: 1px solid #888888; }
+h3 { font-size: 19px; margin: 28px 0 12px; }
+p { margin: 12px 0; }
+a { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+nav { border: 1px solid #888888; padding: 14px 18px; margin: 20px 0 28px; background: #f7f7f7; }
+nav a { display: inline-block; margin-right: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 14px; line-height: 1.75; }
+th,td { border: 1px solid #999999; padding: 10px 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+th { font-weight: 700; background: #eeeeee; }
+td { font-family: "SimSun", "宋体", serif; }
+pre,code { font-family: "SimSun", "宋体", serif; }
+code { font-size: 0.92em; }
+pre { padding: 18px 20px; border: 1px solid #999999; background: #f7f7f7; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; font-size: 14px; }
+blockquote { margin: 20px 0; padding: 6px 20px; border-left: 3px solid #000000; background: #f7f7f7; }
+li { margin: 8px 0; }
+@media (max-width: 800px) { main { padding: 24px 18px 48px; } table { display: block; overflow-x: auto; } th,td { min-width: 130px; } }
+@media print { main { max-width: none; padding: 0; } body { font-size: 11pt; } h1 { font-size: 20pt; } h2 { font-size: 16pt; break-after: avoid; } h3 { break-after: avoid; } table,pre { font-size: 9pt; } thead { display: table-header-group; } nav { display: none; } }
+
+html, body, body * { color: #000000 !important; } body, p, li, td, th, code, pre { font-family: SimSun, "宋体", serif; } h1,h2,h3,h4,h5,h6 { font-family: SimHei, "黑体", sans-serif; } table { width:100%; } td { overflow-wrap:anywhere; }
+</style></head><body><main><h1>Jev 与 LLM 路由对比证据索引</h1>
+<p>主报告：<a href="测试报告.md">测试报告</a>；简历：<a href="简历表述.md">简历表述</a>；完整逐文件清单：<a href="实测证据/inventory.json">inventory.json</a>。所有归档均在本目录，未上传或对外发送。</p>
+<h2>1. 真实运行身份</h2>
+<ul>
+<li>主正式：<code>jlc04-formal-live-20261026-203132-2b882a</code>，COMPLETE，2538 条；简历主指标仅引用此运行。</li>
+<li>冒烟：<code>jlc04-smoke-live-20261026-201850-be37aa</code>，COMPLETE，60 条，仅作入口健康验证。</li>
+<li>首次正式尝试：<code>jlc04-formal-live-20261026-202205-0b4ad9</code>，INCOMPLETE，25 条；保留中止与费用尝试，不混入主结果。</li>
+<li>接受状态：NOT_EVALUATED / USER_REPORT_ONLY；APPLICATION_ROUTE 未实施、未验证。</li>
+</ul>
+<h2>2. 原始与复算证据</h2>
+<table>
+<thead>
+<tr>
+<th>本地文件</th>
+<th>字节</th>
+<th>SHA-256</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="实测证据/jlc04-smoke-live-20261026-201850-be37aa/manifest.json">jlc04-smoke-live-20261026-201850-be37aa/manifest.json</a></td>
+<td>27133</td>
+<td>9e2463c2478abd0964876f9cb98fc1a33f724f265f30b9483fb248c7651565fa</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-smoke-live-20261026-201850-be37aa/requests.jsonl">jlc04-smoke-live-20261026-201850-be37aa/requests.jsonl</a></td>
+<td>58309</td>
+<td>002ee834b8d4b19d5cbcc5f8654c3c9a35b7d2ece8f2fed11fa72b8925c067d1</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-smoke-live-20261026-201850-be37aa/schedule.jsonl">jlc04-smoke-live-20261026-201850-be37aa/schedule.jsonl</a></td>
+<td>28616</td>
+<td>0151b1122b2552dcd20a99b29c11cb47d717e720acdef3886d24b87d6bf14f80</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-smoke-live-20261026-201850-be37aa/progress.jsonl">jlc04-smoke-live-20261026-201850-be37aa/progress.jsonl</a></td>
+<td>9007</td>
+<td>457dd04153f36829b1670ee52b9b2855a4aa05d03cabbef0b03fd34b500e1f8f</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-smoke-live-20261026-201850-be37aa/summary.json">jlc04-smoke-live-20261026-201850-be37aa/summary.json</a></td>
+<td>163878</td>
+<td>66c05570b8f0b96028183f2f01dc4ee41befdcf64285d495a288ef0bd93f9ab1</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-smoke-live-20261026-201850-be37aa/summary.md">jlc04-smoke-live-20261026-201850-be37aa/summary.md</a></td>
+<td>5706</td>
+<td>0a5e535898d31135b507a14e1535392dce7bf8ed611c879d9489847b7baf3ac9</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-202205-0b4ad9/manifest.json">jlc04-formal-live-20261026-202205-0b4ad9/manifest.json</a></td>
+<td>27173</td>
+<td>61fbda3833b3ac3968a4aaed9ebdfd83deb0f5b368c04c35cc96e36e3a6d0d97</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-202205-0b4ad9/requests.jsonl">jlc04-formal-live-20261026-202205-0b4ad9/requests.jsonl</a></td>
+<td>24514</td>
+<td>66701f022220dfdcac4adb587fa869d5c9638bcba032f0c1c2d7bb8d8ab6e70c</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-202205-0b4ad9/schedule.jsonl">jlc04-formal-live-20261026-202205-0b4ad9/schedule.jsonl</a></td>
+<td>1204527</td>
+<td>3cfa51c11bbe5619f80e58d956415aa73ea10da610066dc017402f17815befb4</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-202205-0b4ad9/progress.jsonl">jlc04-formal-live-20261026-202205-0b4ad9/progress.jsonl</a></td>
+<td>3743</td>
+<td>8d372bd1919a636ab810d988e20cb6615e4aad1afd13693179cf2a7f54afdeaa</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-202205-0b4ad9/summary.json">jlc04-formal-live-20261026-202205-0b4ad9/summary.json</a></td>
+<td>383712</td>
+<td>c30f17169b2368ac2f331611a7a38220e92fbca8fd8dc03cde0fd7116505e2ce</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-202205-0b4ad9/summary.md">jlc04-formal-live-20261026-202205-0b4ad9/summary.md</a></td>
+<td>6207</td>
+<td>04d7784673fbdd2d432de427479fceaa0977734871e3517efaa73f0718e55d07</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-203132-2b882a/manifest.json">jlc04-formal-live-20261026-203132-2b882a/manifest.json</a></td>
+<td>27149</td>
+<td>8928d35200011358f1d6fc73b9e3a455b9e14be20ba362ff5478da8d08cde26d</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-203132-2b882a/requests.jsonl">jlc04-formal-live-20261026-203132-2b882a/requests.jsonl</a></td>
+<td>2462371</td>
+<td>7a4d84117fdfcf1c1d452981fdabfd34fb1cad55d7bcf3be6fbe8cb4a66d53d8</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-203132-2b882a/schedule.jsonl">jlc04-formal-live-20261026-203132-2b882a/schedule.jsonl</a></td>
+<td>1204527</td>
+<td>5633b526742c2ad5d567604b5886e5e473a5202dea1717eacbf325bc1b8a9e59</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-203132-2b882a/progress.jsonl">jlc04-formal-live-20261026-203132-2b882a/progress.jsonl</a></td>
+<td>389778</td>
+<td>bc0dc91504a4ede24005525b77b8e93d95dc288289b422a447ee6e44556f12cb</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-203132-2b882a/summary.json">jlc04-formal-live-20261026-203132-2b882a/summary.json</a></td>
+<td>404009</td>
+<td>3d7dcfe834c40d43e7a7cdacb7f6190d6cc6aa6cb68fb94597d614cfd35c0aab</td>
+</tr>
+<tr>
+<td><a href="实测证据/jlc04-formal-live-20261026-203132-2b882a/summary.md">jlc04-formal-live-20261026-203132-2b882a/summary.md</a></td>
+<td>6047</td>
+<td>93a377c8746352751f082952a2349ca9f88a594fff1511227425905767d8a55d</td>
+</tr>
+</tbody>
+</table>
+<h2>3. 冻结资料与验证</h2>
+<ul>
+<li><a href="实测证据/frozen/protocol.json">冻结协议</a>、<a href="实测证据/frozen/route-eval-v1.jsonl">冻结样本</a>、<a href="实测证据/frozen/dataset-audit.json">样本审计</a>、<a href="实测证据/frozen/sample-review.jsonl">争议审阅</a>、<a href="实测证据/frozen/route-agent-system-message.txt">通用路由提示词</a>。</li>
+<li><a href="实测证据/validation/final-budget-ledger.json">累计调用与预算台账</a>、<a href="实测证据/validation/live-approval.json">授权摘要</a>、<a href="实测证据/validation/smoke-gate.json">冒烟入口门禁</a>、<a href="实测证据/validation/formal-prior-attempts.json">首次中止消耗</a>、<a href="实测证据/validation/payload-scope-review.json">发送范围核验</a>。</li>
+<li><a href="实测证据/validation/jlc04-invalid-output-policy-tests.log">21 项 Java 验证日志</a>、<a href="实测证据/validation/jlc03-unit-tests-report-only.log">30 项 Python 验证日志</a>、<a href="实测证据/validation/workspace-before.json">起始受保护文件哈希</a>。</li>
+<li>采集器与统计工具冻结源码位于 <code>实测证据/collector-source/</code>；主 manifest 记录真实加载 class 的哈希。生产源码只列哈希，不复制连接配置。</li>
+</ul>
+<h2>4. 复算与保护</h2>
+<pre><code class="language-powershell">python &quot;D:\Project\Java\tjxt\docs\Jev与LLM路由对比\benchmark_report.py&quot; &quot;D:\Project\Java\tjxt\docs\Jev与LLM路由对比\实测证据\jlc04-formal-live-20261026-203132-2b882a&quot;
+</code></pre>
+<p>完整数据返回 0，不意味着达标；首次中止数据返回 3。复算只读原始记录并更新其派生 summary，不发起模型调用。可按 inventory.json 核对原始文件；若主动重生成 summary，派生文件的工具版本和哈希需同步记录，禁止修改原始请求后沿用旧身份。</p>
+<p>归档前实际凭据字面量扫描通过，原有 21 个文件 SHA-256 未变；没有归档凭据文件。仍缺少实际账号账单、具体 qwen-plus 后端版本、业务标签验收、子阶段计时与应用层数据；这些缺项不由本报告补造。</p></main></body></html>

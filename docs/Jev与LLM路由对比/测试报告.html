@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>测试报告</title><style>
+:root { color-scheme: light; }
+* { color: #000000 !important; box-sizing: border-box; }
+body { margin: 0; background: #ffffff; font-family: "SimSun", "宋体", serif; font-size: 16px; line-height: 1.85; }
+main { max-width: 1140px; margin: 0 auto; padding: 48px 52px 80px; }
+h1,h2,h3,h4,h5,h6,th,caption,nav { font-family: "SimHei", "黑体", sans-serif; }
+h1 { font-size: 30px; line-height: 1.5; margin: 0 0 24px; padding-bottom: 18px; border-bottom: 2px solid #000000; }
+h2 { font-size: 23px; line-height: 1.55; margin: 42px 0 16px; padding: 9px 0; border-bottom: 1px solid #888888; }
+h3 { font-size: 19px; margin: 28px 0 12px; }
+p { margin: 12px 0; }
+a { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+nav { border: 1px solid #888888; padding: 14px 18px; margin: 20px 0 28px; background: #f7f7f7; }
+nav a { display: inline-block; margin-right: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 14px; line-height: 1.75; }
+th,td { border: 1px solid #999999; padding: 10px 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+th { font-weight: 700; background: #eeeeee; }
+td { font-family: "SimSun", "宋体", serif; }
+pre,code { font-family: "SimSun", "宋体", serif; }
+code { font-size: 0.92em; }
+pre { padding: 18px 20px; border: 1px solid #999999; background: #f7f7f7; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; font-size: 14px; }
+blockquote { margin: 20px 0; padding: 6px 20px; border-left: 3px solid #000000; background: #f7f7f7; }
+li { margin: 8px 0; }
+@media (max-width: 800px) { main { padding: 24px 18px 48px; } table { display: block; overflow-x: auto; } th,td { min-width: 130px; } }
+@media print { main { max-width: none; padding: 0; } body { font-size: 11pt; } h1 { font-size: 20pt; } h2 { font-size: 16pt; break-after: avoid; } h3 { break-after: avoid; } table,pre { font-size: 9pt; } thead { display: table-header-group; } nav { display: none; } }
+
+html, body, body * { color: #000000 !important; } body, p, li, td, th, code, pre { font-family: SimSun, "宋体", serif; } h1,h2,h3,h4,h5,h6 { font-family: SimHei, "黑体", sans-serif; } table { width:100%; } td { overflow-wrap:anywhere; }
+</style></head><body><main><h1>Jev 与 LLM 路由耗时对比测试报告</h1>
+<p>报告版本：1.0；日期：2026-10-26；任务：JLC-04 / JLC-05。主运行：<code>jlc04-formal-live-20261026-203132-2b882a</code>。</p>
+<h2>1. 结果与结论范围</h2>
+<p>在隔离 Java 路由链路、413 条人工构造样本各重复 3 轮的对比中，Jev 加 LLM 回退相对 DashScope qwen-plus 主路由，整体 P50 从 <strong>405.94 ms 降至 211.59 ms（降低 47.88%）</strong>，P95 从 <strong>722.19 ms 降至 536.62 ms（降低 25.69%）</strong>。路由阶段 LLM 逻辑调用从 1239 次降至 49 次，减少 <strong>96.05%</strong>；主准确率为 <strong>94.75% → 98.47%</strong>。</p>
+<p>数据支持本次指定环境中观察到的路由耗时降低。用户要求“仅报告数据，暂不判定达标”，故接受状态为 <strong>NOT_EVALUATED / USER_REPORT_ONLY</strong>，不作业务达标或上线决定。这里计时覆盖路由决策服务，后续业务 Agent 生成回答未执行；没有聊天首字、完整回答耗时、生产流量、高并发或货币成本收益证据。</p>
+<h2>2. 实验身份与实际行为</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>冻结值 / 实际证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主运行时间（上海）</td>
+<td>2026-10-26 20:31:52 至 2026-10-26 20:57:50</td>
+</tr>
+<tr>
+<td>模式 / 环境</td>
+<td>LIVE / ISOLATED_JAVA_ROUTE</td>
+</tr>
+<tr>
+<td>基线 A</td>
+<td>LLM_PRIMARY；配置 llm-primary-v1；DashScope qwen-plus</td>
+</tr>
+<tr>
+<td>实验 B</td>
+<td>JEV_WITH_FALLBACK；配置 jev-fallback-085-v1；Jev jev-1.13.0，低置信或不可用时回退至同一 qwen-plus</td>
+</tr>
+<tr>
+<td>版本核实</td>
+<td>Jev 返回 model=jev-1.13.0；LLM 配置为 qwen-plus，响应未提供具体后端版本，不能宣称冻结服务端快照</td>
+</tr>
+<tr>
+<td>阈值</td>
+<td>0.85；无按 Agent 覆盖；未启用影子流量</td>
+</tr>
+<tr>
+<td>样本</td>
+<td>413 条 / 104 场景组；103 组含 4 个相似改写，另 1 条单例；不是 1239 个独立标注场景</td>
+</tr>
+<tr>
+<td>标签分布</td>
+<td>RECOMMEND 101、CONSULT 116、BUY 84、KNOWLEDGE 112</td>
+</tr>
+<tr>
+<td>划分</td>
+<td>development 353 条 / 89 组；holdout 60 条 / 15 组；按组隔离</td>
+</tr>
+<tr>
+<td>争议标签</td>
+<td>原标签保留；route-0030、0087、0088、0096 共 4 组 16 条，另列切片；未经业务验收</td>
+</tr>
+<tr>
+<td>调度</td>
+<td>并发 1；3 轮；每轮每组 10 次预热；间隔 250 ms；种子 20261026；Java shuffle(seed+round)；交替 AB/BA</td>
+</tr>
+<tr>
+<td>超时 / 代理</td>
+<td>Jev connect 500 / read 1200 ms，经本机 127.0.0.1:7890；LLM connect 5000 / read 20000 ms，直连；外层路由截止 30000 ms</td>
+</tr>
+<tr>
+<td>重试</td>
+<td>Jev 无应用重试；LLM 使用 Spring AI 默认 transient-only，最多 10 attempts，退避 2 s×5、最高 180 s；外层截止可能先终止</td>
+</tr>
+<tr>
+<td>运行时</td>
+<td>Windows 11；Java 21.0.8；Spring AI 1.0.0；Alibaba 1.0.0.2；DashScope SDK 2.22.27</td>
+</tr>
+<tr>
+<td>未显式选项</td>
+<td>temperature/topP/topK/maxTokens/enableThinking 等为 null；服务端默认未知，未自行补设</td>
+</tr>
+</tbody>
+</table>
+<p>使用真实 <code>FallbackRouteDecisionService.decide</code>、Jev/LLM 决策服务、RouteAgent、ChatClient 和优化 Advisor。每次使用唯一会话，装入相同原始历史，清理线程上下文，当前问题不重复注入。内存持久化替代 Redis/数据库，ChatSessionService.update 为 no-op；不启动 Boot/Nacos，不运行下游业务 Agent 或工具。两种既有上下文裁剪策略保留，因此比较的是当前完整策略链路。</p>
+<p>外层 <code>nanoTime</code> 覆盖真实路由服务调用、网络、回退及该调用内日志等开销；历史准备和落盘在计时外。未采集可靠 Jev/LLM 子阶段耗时，不能把差值分解为纯模型推理、代理或上下文读取收益。并发为 1，不构成吞吐压测。</p>
+<h2>3. 数据完整性与统计口径</h2>
+<p>主运行计划、START、FINISH、逐请求记录均为 <strong>2538</strong> 条：正式 2478 条（每组 1239），预热 60 条。缺失、重复、未知完成/耗时均为 <strong>0</strong>。每轮两组均完整覆盖 413 条。原始计划、请求和进度经严格解析对账；归档后重新生成统计，并以独立公式复核总体分位数、主准确率与调用数。</p>
+<p>P50/P95/P99 使用 nearest-rank，从全部正式完成记录重算，包含回退、SAFE_DEFAULT 与已结束错误；不平均逐轮分位数，不把缺失补 0。预热不计主指标，但计调用预算。主准确率 = <code>status=OK 且原标签正确 / 计划正式数</code>；SAFE_DEFAULT 即使默认 KNOWLEDGE 与标签相同也计错。四类 Recall 同样按计划类别为分母。仅标签匹配率另列，避免安全默认抬高主准确率。</p>
+<h2>4. 总体与逐轮结果</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>LLM 主路由</th>
+<th>Jev 加回退</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正式计划 / 完成</td>
+<td>1239</td>
+<td>1239</td>
+</tr>
+<tr>
+<td>全部完成请求 P50（ms）</td>
+<td>405.94</td>
+<td>211.59</td>
+</tr>
+<tr>
+<td>全部完成请求 P95（ms）</td>
+<td>722.19</td>
+<td>536.62</td>
+</tr>
+<tr>
+<td>P99（ms，探索性）</td>
+<td>1030.33</td>
+<td>735.57</td>
+</tr>
+<tr>
+<td>主准确率</td>
+<td>1174/1239 = 94.75%</td>
+<td>1220/1239 = 98.47%</td>
+</tr>
+<tr>
+<td>最终标签匹配率（含安全默认）</td>
+<td>95.96%</td>
+<td>99.03%</td>
+</tr>
+<tr>
+<td>正常决策覆盖率</td>
+<td>98.79%</td>
+<td>99.44%</td>
+</tr>
+<tr>
+<td>SAFE_DEFAULT</td>
+<td>15/1239 = 1.21%</td>
+<td>7/1239 = 0.56%</td>
+</tr>
+<tr>
+<td>ERROR / INTERRUPTED</td>
+<td>0 / 0</td>
+<td>0 / 0</td>
+</tr>
+<tr>
+<td>LLM 逻辑调用数</td>
+<td>1239</td>
+<td>49</td>
+</tr>
+<tr>
+<td>Jev 逻辑调用数</td>
+<td>0</td>
+<td>1239</td>
+</tr>
+<tr>
+<td>RestClient 执行尝试</td>
+<td>1239</td>
+<td>1288</td>
+</tr>
+</tbody>
+</table>
+<p>主准确率提升 3.71 个百分点。最终 ERROR 为 0 不能解释为模型输出全部有效：LLM 主路由有 15 次、Jev 加回退有 7 次安全默认，已在主准确率中计错。正常决策自身的条件准确率为 95.92% / 99.03%，分母与主准确率不同。</p>
+<table>
+<thead>
+<tr>
+<th>轮次</th>
+<th>组</th>
+<th>正式数</th>
+<th>P50 ms</th>
+<th>P95 ms</th>
+<th>主准确率</th>
+<th>安全默认数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>LLM 主路由</td>
+<td>413</td>
+<td>411.78</td>
+<td>749.18</td>
+<td>94.19%</td>
+<td>7</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Jev 加回退</td>
+<td>413</td>
+<td>211.77</td>
+<td>487.96</td>
+<td>98.31%</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LLM 主路由</td>
+<td>413</td>
+<td>410.69</td>
+<td>729.73</td>
+<td>95.16%</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jev 加回退</td>
+<td>413</td>
+<td>214.80</td>
+<td>589.79</td>
+<td>98.79%</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>LLM 主路由</td>
+<td>413</td>
+<td>397.99</td>
+<td>642.27</td>
+<td>94.92%</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Jev 加回退</td>
+<td>413</td>
+<td>209.40</td>
+<td>529.34</td>
+<td>98.31%</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>Jev 组逐轮 P95 为 487.96 / 589.79 / 529.34 ms，保留尾部波动；总体不是挑选最好一轮。仅 OK 子集：A 的 P50/P95 为 405.11/719.10 ms（n=1224），B 为 211.45/505.69 ms（n=1232）。P99 只有本样本规模的探索意义，不作稳定 SLO 或显著性结论。</p>
+<p>1239 对请求全部有精确耗时，双 OK 为 1223 对；计入失败的逐对 A−B 耗时差 P50 为 186.99 ms。B 更快 1158 对、更慢 81 对、相等 0 对。配对差分位数与两组分位数之差含义不同。</p>
+<h2>5. 质量与复杂场景</h2>
+<table>
+<thead>
+<tr>
+<th>原标签</th>
+<th>每组计划数</th>
+<th>LLM Recall</th>
+<th>Jev 加回退 Recall</th>
+<th>LLM 误报数</th>
+<th>Jev 加回退误报数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RECOMMEND</td>
+<td>303</td>
+<td>91.75%</td>
+<td>100.00%</td>
+<td>3</td>
+<td>0</td>
+</tr>
+<tr>
+<td>CONSULT</td>
+<td>348</td>
+<td>96.55%</td>
+<td>96.55%</td>
+<td>34</td>
+<td>0</td>
+</tr>
+<tr>
+<td>BUY</td>
+<td>252</td>
+<td>96.03%</td>
+<td>100.00%</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>KNOWLEDGE</td>
+<td>336</td>
+<td>94.64%</td>
+<td>97.92%</td>
+<td>13</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p>误报数仅统计正常决策将其他原标签判为该类；安全默认另计。BUY Recall 为 242/252 → 252/252，两组 BUY 正常误报均为 0；这只代表人工集上的观测。</p>
+<table>
+<thead>
+<tr>
+<th>切片</th>
+<th>每组正式数</th>
+<th>LLM 主准确率</th>
+<th>Jev 主准确率</th>
+<th>LLM P95 ms</th>
+<th>Jev P95 ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>split=development</td>
+<td>1059</td>
+<td>94.15%</td>
+<td>98.21%</td>
+<td>710.16</td>
+<td>589.79</td>
+</tr>
+<tr>
+<td>split=holdout</td>
+<td>180</td>
+<td>98.33%</td>
+<td>100.00%</td>
+<td>781.74</td>
+<td>321.89</td>
+</tr>
+<tr>
+<td>policyPending=False</td>
+<td>1191</td>
+<td>96.47%</td>
+<td>99.41%</td>
+<td>719.31</td>
+<td>491.63</td>
+</tr>
+<tr>
+<td>policyPending=True</td>
+<td>48</td>
+<td>52.08%</td>
+<td>75.00%</td>
+<td>766.07</td>
+<td>748.96</td>
+</tr>
+<tr>
+<td>hasHistory=False</td>
+<td>1119</td>
+<td>95.44%</td>
+<td>98.30%</td>
+<td>722.19</td>
+<td>582.16</td>
+</tr>
+<tr>
+<td>hasHistory=True</td>
+<td>120</td>
+<td>88.33%</td>
+<td>100.00%</td>
+<td>652.72</td>
+<td>294.50</td>
+</tr>
+<tr>
+<td>multiIntent=False</td>
+<td>1143</td>
+<td>95.45%</td>
+<td>99.39%</td>
+<td>719.10</td>
+<td>493.84</td>
+</tr>
+<tr>
+<td>multiIntent=True</td>
+<td>96</td>
+<td>86.46%</td>
+<td>87.50%</td>
+<td>766.07</td>
+<td>735.57</td>
+</tr>
+<tr>
+<td>tags=boundary</td>
+<td>156</td>
+<td>97.44%</td>
+<td>100.00%</td>
+<td>728.89</td>
+<td>331.49</td>
+</tr>
+<tr>
+<td>tags=clear</td>
+<td>624</td>
+<td>97.44%</td>
+<td>100.00%</td>
+<td>693.89</td>
+<td>422.04</td>
+</tr>
+<tr>
+<td>tags=colloquial</td>
+<td>72</td>
+<td>100.00%</td>
+<td>100.00%</td>
+<td>719.10</td>
+<td>343.07</td>
+</tr>
+<tr>
+<td>tags=injection</td>
+<td>36</td>
+<td>100.00%</td>
+<td>100.00%</td>
+<td>658.72</td>
+<td>874.59</td>
+</tr>
+<tr>
+<td>tags=insufficient</td>
+<td>48</td>
+<td>93.75%</td>
+<td>100.00%</td>
+<td>934.85</td>
+<td>408.30</td>
+</tr>
+<tr>
+<td>tags=multiIntent</td>
+<td>96</td>
+<td>86.46%</td>
+<td>87.50%</td>
+<td>766.07</td>
+<td>735.57</td>
+</tr>
+<tr>
+<td>tags=outOfScope</td>
+<td>36</td>
+<td>58.33%</td>
+<td>80.56%</td>
+<td>857.65</td>
+<td>868.33</td>
+</tr>
+<tr>
+<td>tags=reference</td>
+<td>120</td>
+<td>88.33%</td>
+<td>100.00%</td>
+<td>652.72</td>
+<td>294.50</td>
+</tr>
+<tr>
+<td>tags=typo</td>
+<td>48</td>
+<td>100.00%</td>
+<td>100.00%</td>
+<td>600.35</td>
+<td>542.04</td>
+</tr>
+</tbody>
+</table>
+<p>切片 tags 可重叠，不能相加作为总样本数；每条样本重复 3 轮，因此争议 16 条对应每组 48 次观测，holdout 60 条对应 180 次。未针对本轮结果调阈值、改标签或移除难例；争议切片的差异需业务裁决后另版本重测。</p>
+<p>切片中也有变慢结果：injection 的 P95 为 658.72→874.59 ms，outOfScope 为 857.65→868.33 ms，均高于基线；两类各仅 12 条独立样本、重复 3 轮，不能据总体改善推断所有场景尾延迟均降低。</p>
+<h2>6. 回退、错误与瓶颈证据</h2>
+<p>正式 Jev 组直接采用 <strong>1190/1239 = 96.05%</strong>，实际尝试 LLM 回退 <strong>49/1239 = 3.95%</strong>。其中 42 次得到正常 LLM 回退决策，7 次 LLM 非法路由枚举后进入安全默认；失败回退没有漏算为“未调用 LLM”。Jev 子调用有 1 次 INVALID_RESPONSE；最终原因 LOW_CONFIDENCE=41、INVALID_RESPONSE=1、LLM_ERROR=7（LLM_ERROR 会覆盖先前 Jev 原因，不能把最终原因表当完整 Jev 子原因分布）。</p>
+<p>基线 15 次、Jev 回退 7 次均记录为 INVALID_LLM_ROUTE_RESULT；采集器未保存模型原始输出正文，无法进一步核对具体非法字符串。没有观测到认证、额度、限流或传输异常；仅凭本次记录不能保证这些问题不会发生。所有请求的 RestClient attempts 之和等于 Jev+LLM 逻辑调用之和，未观测额外应用层执行尝试；底层重连、网络重传及供应商计费不可由此断言。</p>
+<p>Jev 直接采用子集 n=1190，P50/P95=210.67/299.90 ms；尝试回退子集 n=49，P50/P95=661.90/874.59 ms。回退路径尾部更高，是本次可定位的慢路径；子集输入难度不同，不能将其差值解释成纯回退额外成本。代理、服务区域、连接复用和缓存可能影响结果，目前缺少阶段证据，只能列为下一实验变量。</p>
+<p>建议下一轮先在 development 上核对上述非法输出及 4 组标签争议，固定新版本后对保留集复测；若验证应用层收益，再另行准备隔离 Redis/数据库与真实 Advisor/会话更新链路；若研究尾延迟，先增加子阶段计时并单变量比较网络出口/连接策略。本轮不修改策略，也不新增真实调用。</p>
+<h2>7. 实际执行与预算台账</h2>
+<p>冒烟完整完成后进入正式测试。第一次正式尝试在第 25 条结束后停止：采集器将一次非法 LLM 枚举导致的 SAFE_DEFAULT 误判为系统故障。该运行 20 条预热、5 条正式数据和 26 次 HTTP 尝试完整保留，状态 INCOMPLETE，不混入主结果。只修复采集器停止分类并通过 21 项 Java 测试后，以新 runId 从头完成全计划；主运行中同类非法输出均保留并计错。两次采集器源码身份不同，均保存在各自 manifest，未改生产服务、阈值、提示词或样本。</p>
+<table>
+<thead>
+<tr>
+<th>运行</th>
+<th>状态</th>
+<th>路由数</th>
+<th>预热数</th>
+<th>Jev 调用</th>
+<th>LLM 调用</th>
+<th>RestClient 尝试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jlc04-smoke-live-20261026-201850-be37aa</td>
+<td>COMPLETE</td>
+<td>60</td>
+<td>20</td>
+<td>30</td>
+<td>31</td>
+<td>61</td>
+</tr>
+<tr>
+<td>jlc04-formal-live-20261026-202205-0b4ad9</td>
+<td>INCOMPLETE</td>
+<td>25</td>
+<td>20</td>
+<td>13</td>
+<td>13</td>
+<td>26</td>
+</tr>
+<tr>
+<td>jlc04-formal-live-20261026-203132-2b882a</td>
+<td>COMPLETE</td>
+<td>2538</td>
+<td>60</td>
+<td>1269</td>
+<td>1318</td>
+<td>2587</td>
+</tr>
+<tr>
+<td>累计</td>
+<td>—</td>
+<td>2623</td>
+<td>100</td>
+<td>1312</td>
+<td>1362</td>
+<td>2674</td>
+</tr>
+</tbody>
+</table>
+<p>累计 <strong>2674 / 4000</strong> 次 RestClient 执行尝试，包含冒烟、首次中止、全部预热与正式回退。用户报告 Jev 余额 5 美元；官方页面当日 Jev-1.13.0 输入价 0.042 美元/百万 token、输出免费，按每次 64000 输入 token 的保守边界计算，1312 次 Jev 约 <strong>3.526656 美元</strong>，低于 5 美元。这是预算上界估算，不是实际扣费；未读取账号余额或账单，也没有货币硬限额。DashScope 属另一个账号单独计费。实际成本字段为 null，不能将 LLM 调用减少比例写成费用节省。价格来源：<a href="https://docs.typesafe.ai/models">Typesafe 官方模型与价格</a>。</p>
+<h2>8. 源码、复现与交付核验</h2>
+<p>分支 <code>jev-routing</code>，HEAD <code>90a3f044bc586066dd1fc6796184d5ef8432fd82</code>，dirty 工作区纳入基线；仅提交号不能代表本次代码。原有 21 个文件哈希与起始快照一致；本批未提交、未推送、未修改线上配置。最新本地验证：21 项 Java 组件测试、30 项 Python 统计合同测试通过；真实数据完整性 VERIFIED 不等于优化达标。</p>
+<p>数据 SHA-256：<code>8e2addb8b5b5cb561c44e89cb1593f3c5fcd6367085d79008a9acd0fddcecfd2</code>。协议 SHA-256：<code>320444ed9cecee17cec516e9446adb884f52a7c7a7f38e3fabd4cd8b89083d7c</code>。原始动态提示词 SHA-256：<code>539446f25a3188ead5546407c6a0d81dfc8a081994aebdc782d4149bdcdd1949</code>；与 RouteAgent 固定输出约束组合后 SHA-256：<code>dcafe1319c0926e6ce9ebd7e8b5e60ca26c69b3e92e5908e3f5c6ec0ccc3c03b</code>。全部源文件、采集器及 class 哈希在主 manifest；不为后来的文件静默替换历史身份。</p>
+<p>本地脱敏归档位于同目录“实测证据”，保留三次真实运行的计划、请求、进度、清单与复算汇总，冻结人工数据/提示词/协议、采集器和统计源码、授权/预算台账及验证日志。复制前做实际凭据字面量扫描，未归档 Key、IDEA 配置或 Nacos 连接配置。文件 SHA-256 与大小见 inventory.json，链接见<a href="证据索引.md">证据索引</a>。</p>
+<p>在仓库根目录仅复算，不会发起 API：</p>
+<pre><code class="language-powershell">python &quot;D:\Project\Java\tjxt\docs\Jev与LLM路由对比\benchmark_report.py&quot; &quot;D:\Project\Java\tjxt\docs\Jev与LLM路由对比\实测证据\jlc04-formal-live-20261026-203132-2b882a&quot;
+</code></pre>
+<p>该命令退出 0 表示数据完整且汇总成功，接受状态仍为 NOT_EVALUATED；首次中止运行复算退出 3，保留 INCOMPLETE。需要重新实测时须新 runId、重新核实配置和可用预算，不自动重放未知请求。</p>
+<h2>9. 限制与待裁决事项</h2>
+<p>人工构造标签、相似改写及重复轮次限制了外推范围；没有线上分布、人工业务验收或独立随机样本的统计显著性证据。不同供应商、模型和既有上下文策略共同构成本次方案；服务端模型默认值、后端版本与缓存状态并非全部可观测。网络出口包含 Jev 本地代理和 DashScope 直连，结果属于这组实际配置。APPLICATION_ROUTE 未实施、未验证；路由后业务模型生成耗时仍未知。用户选择暂不判定达标，后续质量门槛与上线取舍待裁决。</p></main></body></html>

@@ -36,6 +36,22 @@ public class AgentServiceImpl implements ChatService {
 
     @Override
     public Flux<ChatEventVO> chat(String question, String sessionId) {
+        String requestId = IdUtil.fastSimpleUUID();
+        try {
+            // 在请求线程内完成路由和工具上下文构造，保留 UserContext。
+            return dispatch(question, sessionId).onErrorResume(error -> {
+                log.warn("agent stream failed: requestId={}, errorType={}",
+                        requestId, error.getClass().getSimpleName());
+                return friendlyErrorEvents();
+            });
+        } catch (RuntimeException error) {
+            log.warn("agent chat failed: requestId={}, errorType={}",
+                    requestId, error.getClass().getSimpleName());
+            return friendlyErrorEvents();
+        }
+    }
+
+    private Flux<ChatEventVO> dispatch(String question, String sessionId) {
         RouteDecision decision = routeDecisionService.decide(question, sessionId);
         AgentTypeEnum agentType = decision == null ? null : decision.agentType();
         Agent agent = findAgentByType(agentType);
@@ -48,15 +64,19 @@ public class AgentServiceImpl implements ChatService {
                     decision == null ? null : decision.fallbackReason());
             Agent safeAgent = findAgentByType(AgentTypeEnum.KNOWLEDGE);
             if (safeAgent == null) {
-                ChatEventVO friendlyErrorEvent = ChatEventVO.builder()
-                        .eventType(ChatEventTypeEnum.DATA.getValue())
-                        .eventData("抱歉，当前服务暂时不可用，请稍后重试。")
-                        .build();
-                return Flux.just(friendlyErrorEvent, AbstractAgent.STOP_EVENT);
+                return friendlyErrorEvents();
             }
             return safeAgent.processStream(question, sessionId);
         }
         return agent.processStream(question, sessionId);
+    }
+
+    private Flux<ChatEventVO> friendlyErrorEvents() {
+        ChatEventVO event = ChatEventVO.builder()
+                .eventType(ChatEventTypeEnum.DATA.getValue())
+                .eventData("抱歉，当前服务暂时不可用，请稍后重试。")
+                .build();
+        return Flux.just(event, AbstractAgent.STOP_EVENT);
     }
 
     @Override

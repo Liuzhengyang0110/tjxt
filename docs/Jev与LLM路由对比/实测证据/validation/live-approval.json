@@ -1,0 +1,43 @@
+{
+  "approvalId": "user-20261026-consolidated-jev-usd5-report-only",
+  "date": "2026-10-26",
+  "environmentLevel": "ISOLATED_JAVA_ROUTE",
+  "configurationApproved": true,
+  "proxyApproved": true,
+  "existingCredentialsApproved": true,
+  "jevBudgetUsd": 5.0,
+  "acceptancePolicy": "REPORT_ONLY",
+  "originalLabelsApprovedForExperiment": true,
+  "batchLimits": {
+    "routeCalls": 2623,
+    "jevLogicalCalls": 1312,
+    "llmLogicalCalls": 2611,
+    "restClientExecutionAttempts": 4000
+  },
+  "pricingEvidence": {
+    "url": "https://docs.typesafe.ai/models",
+    "checkedDate": "2026-10-26",
+    "jevInputUsdPerMillionTokens": 0.042,
+    "outputUsdPerMillionTokens": 0.0,
+    "defaultRequestContextTokens": 64000,
+    "longContextEnabled": false
+  },
+  "conservativeJevEstimateUsd": 3.526656,
+  "currencyHardCapClaimed": false,
+  "dashscopeBilledSeparately": true,
+  "condition": "Proceed only if the published-price context/request bound is within reported Jev balance; stop on quota/auth/unknown completion.",
+  "originalBatchLimits": {
+    "routeCalls": 2598,
+    "jevLogicalCalls": 1299,
+    "llmLogicalCalls": 2598,
+    "restClientExecutionAttempts": 4000
+  },
+  "executionAdjustment": {
+    "reason": "One complete invalid route decision exposed an overly broad collector stop rule. Repair only the collector classification; rerun unchanged full dataset, model, prompt, and ordering from a fresh process for comparable measurements. All prior requests remain charged against original 4000 execution-attempt budget.",
+    "priorKnownRequestAttempts": 26,
+    "remainingFormalExecutionAttempts": 3874,
+    "modelOrPromptChanged": false,
+    "unknownOrInterruptedCallsRepeated": false,
+    "mainReportIncludesPriorAttemptAccounting": true
+  }
+}

@@ -179,7 +179,7 @@ class FallbackRouteDecisionServiceTest {
     @ParameterizedTest
     @EnumSource(value = RouteFallbackReason.class, names = {
             "TIMEOUT", "NETWORK_ERROR", "RATE_LIMITED", "OVERLOADED",
-            "AUTH_FAILURE", "INVALID_REQUEST", "INVALID_RESPONSE",
+            "AUTH_FAILURE", "REGION_UNAVAILABLE", "INVALID_REQUEST", "INVALID_RESPONSE",
             "SERVER_ERROR", "UNKNOWN_ERROR"
     })
     void everyJevClientErrorFallsBackExactlyOnce(RouteFallbackReason reason) {
@@ -254,6 +254,58 @@ class FallbackRouteDecisionServiceTest {
     private RouteDecision llmDecision() {
         return new RouteDecision(AgentTypeEnum.CONSULT, null, Map.of(),
                 RouteDecisionSource.LLM_PRIMARY, RouteFallbackReason.NONE, null);
+    }
+
+    @Test
+    void llmPrimaryFailureUsesSafeDefaultWithoutRetrying() {
+        routeProperties.setProvider(RouteProvider.LLM);
+        routeProperties.setFallbackEnabled(false);
+        when(llmService.decide("问题", "会话")).thenThrow(new IllegalStateException("Invalid LLM route result"));
+
+        RouteDecision result = service.decide("问题", "会话");
+
+        assertEquals(AgentTypeEnum.KNOWLEDGE, result.agentType());
+        assertEquals(RouteDecisionSource.SAFE_DEFAULT, result.source());
+        assertEquals(RouteFallbackReason.LLM_ERROR, result.fallbackReason());
+        verify(llmService, times(1)).decide("问题", "会话");
+        verify(routeMetrics, times(1)).recordDecisionError(RouteFallbackReason.LLM_ERROR);
+        verifyNoInteractions(jevService, shadowService);
+    }
+
+    @Test
+    void nullLlmPrimaryDecisionUsesSafeDefault() {
+        routeProperties.setProvider(RouteProvider.LLM);
+
+        RouteDecision result = service.decide("问题", "会话");
+
+        assertEquals(RouteDecisionSource.SAFE_DEFAULT, result.source());
+        assertEquals(AgentTypeEnum.KNOWLEDGE, result.agentType());
+        verify(llmService, times(1)).decide("问题", "会话");
+    }
+
+    @Test
+    void failedLlmInShadowUsesSafeDefaultAndSkipsComparison() {
+        routeProperties.setShadowEnabled(true);
+        when(llmService.decide("问题", "会话")).thenThrow(new IllegalStateException("Invalid LLM route result"));
+
+        RouteDecision result = service.decide("问题", "会话");
+
+        assertEquals(RouteDecisionSource.SAFE_DEFAULT, result.source());
+        assertEquals(RouteFallbackReason.LLM_ERROR, result.fallbackReason());
+        verify(llmService, times(1)).decide("问题", "会话");
+        verifyNoInteractions(shadowService, jevService);
+    }
+
+    @Test
+    void failedShadowContextAndLlmStillUseSafeDefault() {
+        routeProperties.setShadowEnabled(true);
+        when(contextBuilder.build("问题", "会话")).thenThrow(new IllegalStateException("memory unavailable"));
+        when(llmService.decide("问题", "会话")).thenThrow(new IllegalStateException("LLM failed"));
+
+        assertEquals(RouteDecisionSource.SAFE_DEFAULT, service.decide("问题", "会话").source());
+
+        verify(llmService, times(1)).decide("问题", "会话");
+        verifyNoInteractions(shadowService, jevService);
     }
 
     private RouteDecision jevDecision(AgentTypeEnum agent, double confidence) {

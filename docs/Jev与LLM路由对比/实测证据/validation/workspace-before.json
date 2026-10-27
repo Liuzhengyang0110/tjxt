@@ -1,0 +1,89 @@
+{
+  "head": "90a3f044bc586066dd1fc6796184d5ef8432fd82",
+  "files": {
+    "docs/Jev改造/eval/README.md": {
+      "sha256": "cfee89730aefead6fb494f11ad9599b281ca4e345cda30e6281ed5d8fb0ff66c",
+      "size": 5955
+    },
+    "docs/Jev改造/eval/route_eval.py": {
+      "sha256": "d3fcc639aacc02eb3f0e19d7280f2cf0944f960884548d60e409154b91b63243",
+      "size": 21879
+    },
+    "docs/Jev改造/eval/test_route_eval.py": {
+      "sha256": "362b5986450fab0dff8d88de10f34d1e63eb9a330dac16770c26911c9d0599eb",
+      "size": 7007
+    },
+    "tj-aigc/pom.xml": {
+      "sha256": "55509a22b2c9410d6a5204f4070e029a60c5792f109295fcafb2b6dc422aff45",
+      "size": 6400
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/agent/RouteAgent.java": {
+      "sha256": "1f76e28797d9c1997b1a45b18fcb1df529b284c0e4cb2b0de7d728236dd6d963",
+      "size": 1459
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/client/JevDecisionClient.java": {
+      "sha256": "0eb18c2fb6eaa2f2fe6be0d3b6b1c12e79136b5a6c5ac719b309b154f2bf2c08",
+      "size": 3816
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/config/JevClientConfig.java": {
+      "sha256": "bc999938d7e281bad22c55d8a4b332846246ece9214faaf6a37aec30524b3b76",
+      "size": 2113
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/config/JevProperties.java": {
+      "sha256": "ceb40c0b31acbfbc1cb891ea28193b8a2e8f8a9bef1ff12de62976749ce67b20",
+      "size": 867
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/model/RouteFallbackReason.java": {
+      "sha256": "8fdbe8b2c485d9c4b53b02acb779abb72c9fe93b3ad44f1e96422170a02f18ef",
+      "size": 327
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/decision/service/impl/FallbackRouteDecisionService.java": {
+      "sha256": "fc79943cc821c8854d401971d1b1ee77b1d6d3d9344ea107f51081a29e323cc2",
+      "size": 8252
+    },
+    "tj-aigc/src/main/java/com/tianji/aigc/service/impl/AgentServiceImpl.java": {
+      "sha256": "138392cda0c59f9752fd86a95fb479593fd42d0eeec0395ac27bdc329a0cb535",
+      "size": 4122
+    },
+    "tj-aigc/src/main/resources/application-local.yml": {
+      "sha256": "9491a6c346af07f1e4fe60f429a678d3a64f065e1bfda070fcd9753bc7f948aa",
+      "size": 1323
+    },
+    "tj-aigc/src/main/resources/application.yml": {
+      "sha256": "306f2a3d887df13659a49c5f85c32a8dad7cfdae4849806409b3dcd79aa0596f",
+      "size": 2532
+    },
+    "tj-aigc/src/test/java/com/tianji/aigc/decision/client/JevDecisionClientTest.java": {
+      "sha256": "e663fbc040a3ea72631515180191baa5124c7ff2a25c1c67843f064e00de434a",
+      "size": 10776
+    },
+    "tj-aigc/src/test/java/com/tianji/aigc/decision/service/impl/FallbackRouteDecisionServiceTest.java": {
+      "sha256": "cf0f0d23be7b4fb95ab022443bc124d78faf88b2b8ddd8a4f33d2d5bcad71c54",
+      "size": 14426
+    },
+    "tj-aigc/src/test/java/com/tianji/aigc/service/impl/AgentServiceImplTest.java": {
+      "sha256": "9affa7576ed50b258d7a9596e500c5f8c99162844359cee4bb9f412b0454318f",
+      "size": 7795
+    },
+    "docs/Jev与LLM路由对比/Jev与LLM路由耗时对比测试任务指南.html": {
+      "sha256": "3d90c7117b2830d68e3662649e169a4e19af87aa431e3841860ee3f88c1cb07c",
+      "size": 53936
+    },
+    "docs/Jev与LLM路由对比/Jev与LLM路由耗时对比测试任务指南.md": {
+      "sha256": "6bc14a3f3eb16bc6bd78ad459b569c25d30ef7ba2c0e392a472cbeacbb6def80",
+      "size": 46778
+    },
+    "tj-aigc/src/test/java/com/tianji/aigc/agent/RouteAgentPromptTest.java": {
+      "sha256": "bf29504ca47bc42087d776dc4047cb8842414d7e6ad1a985d15a80707e0456ed",
+      "size": 1390
+    },
+    "tj-aigc/src/test/java/com/tianji/aigc/controller/ChatControllerSseTest.java": {
+      "sha256": "e99b49a50b55e53c59c964bca6c551bdbfb1a7eda7fbd661b03fca546897ef9e",
+      "size": 2218
+    },
+    "tj-aigc/src/test/java/com/tianji/aigc/tools/ToolSchemaCompatibilityTest.java": {
+      "sha256": "3735a98c1849503066e3f4bef9c796828d7af5d2a79f7dbacf224c7bf2cb1c37",
+      "size": 1597
+    }
+  }
+}

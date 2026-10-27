@@ -1,0 +1,11 @@
+<configuration>
+  <!-- Keep current route INFO logs; suppress any exception body printed by the SDK retry listener. -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder><pattern>%date{HH:mm:ss.SSS} %-5level %logger{60} - %msg%n</pattern></encoder>
+  </appender>
+  <logger name="org.springframework.ai.retry.autoconfigure.SpringAiRetryAutoConfiguration" level="OFF"/>
+  <logger name="org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor" level="OFF"/>
+  <logger name="org.springframework.web" level="WARN"/>
+  <logger name="com.alibaba.cloud.ai" level="WARN"/>
+  <root level="INFO"><appender-ref ref="STDOUT"/></root>
+</configuration>

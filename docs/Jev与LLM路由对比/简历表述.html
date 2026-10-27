@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>简历表述</title><style>
+:root { color-scheme: light; }
+* { color: #000000 !important; box-sizing: border-box; }
+body { margin: 0; background: #ffffff; font-family: "SimSun", "宋体", serif; font-size: 16px; line-height: 1.85; }
+main { max-width: 1140px; margin: 0 auto; padding: 48px 52px 80px; }
+h1,h2,h3,h4,h5,h6,th,caption,nav { font-family: "SimHei", "黑体", sans-serif; }
+h1 { font-size: 30px; line-height: 1.5; margin: 0 0 24px; padding-bottom: 18px; border-bottom: 2px solid #000000; }
+h2 { font-size: 23px; line-height: 1.55; margin: 42px 0 16px; padding: 9px 0; border-bottom: 1px solid #888888; }
+h3 { font-size: 19px; margin: 28px 0 12px; }
+p { margin: 12px 0; }
+a { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+nav { border: 1px solid #888888; padding: 14px 18px; margin: 20px 0 28px; background: #f7f7f7; }
+nav a { display: inline-block; margin-right: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 14px; line-height: 1.75; }
+th,td { border: 1px solid #999999; padding: 10px 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+th { font-weight: 700; background: #eeeeee; }
+td { font-family: "SimSun", "宋体", serif; }
+pre,code { font-family: "SimSun", "宋体", serif; }
+code { font-size: 0.92em; }
+pre { padding: 18px 20px; border: 1px solid #999999; background: #f7f7f7; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; font-size: 14px; }
+blockquote { margin: 20px 0; padding: 6px 20px; border-left: 3px solid #000000; background: #f7f7f7; }
+li { margin: 8px 0; }
+@media (max-width: 800px) { main { padding: 24px 18px 48px; } table { display: block; overflow-x: auto; } th,td { min-width: 130px; } }
+@media print { main { max-width: none; padding: 0; } body { font-size: 11pt; } h1 { font-size: 20pt; } h2 { font-size: 16pt; break-after: avoid; } h3 { break-after: avoid; } table,pre { font-size: 9pt; } thead { display: table-header-group; } nav { display: none; } }
+
+html, body, body * { color: #000000 !important; } body, p, li, td, th, code, pre { font-family: SimSun, "宋体", serif; } h1,h2,h3,h4,h5,h6 { font-family: SimHei, "黑体", sans-serif; } table { width:100%; } td { overflow-wrap:anywhere; }
+</style></head><body><main><h1>Jev 与 LLM 路由对比：简历表述</h1>
+<p>证据日期：2026-10-26；主运行 <code>jlc04-formal-live-20261026-203132-2b882a</code>；仅报告数据，暂不判定达标。完整来源见<a href="测试报告.md">测试报告</a>与<a href="证据索引.md">证据索引</a>。</p>
+<h2>1. 可直接使用的表述</h2>
+<p>为多 Agent 系统建设 Jev 结构化路由、置信度门控与 LLM 回退评测；在隔离 Java 路由链路上，以 413 条人工构造样本进行 3 轮对比（每组 1239 次），相较 qwen-plus 主路由，Jev-1.13.0 加回退使路由 P50 从 405.94 ms 降至 211.59 ms、P95 从 722.19 ms 降至 536.62 ms，分别降低 47.88% 和 25.69%；路由阶段 LLM 逻辑调用减少 96.05%，主准确率为 94.75% → 98.47%。</p>
+<p>这段中的“建设”适用于你能解释并承担该项目实现与评测工作的情况；若仅负责评测，可将开头改为“设计并实现多 Agent 路由对比评测”。不扩展为线上、首字、完整回答、吞吐或费用优化结论。</p>
+<h2>2. 精简版</h2>
+<p>构建 Jev 与 qwen-plus 路由评测链路，基于 413 条人工样本完成 3 轮隔离 Java 对比；Jev 加回退的路由 P50/P95 分别降低 47.88%/25.69%，主准确率 94.75%→98.47%，路由 LLM 逻辑调用减少 96.05%。</p>
+<h2>3. 面试时解释口径</h2>
+<p>测试对象是实际 Java 路由服务，基线是 DashScope qwen-plus，实验是 Jev-1.13.0、0.85 阈值和相同 LLM 回退。并发为 1，固定种子、交替 AB/BA，每轮每组预热 10 次；耗时采用单调时钟，整体 P50/P95 从全部正式完成记录计算，包含失败和安全默认。413 条属于 104 个场景组，3 轮没有扩大独立标注规模。</p>
+<p>主准确率只将正常且符合原标签的决策计对，安全默认均计错。LLM 组 1174/1239 正确，Jev 加回退组 1220/1239 正确；安全默认分别 15 次和 7 次。Jev 直接采用 1190 次、尝试 LLM 回退 49 次，其中 7 次回退失败也计入调用数，所以 LLM 调用减少为 1−49/1239=96.05%。BUY Recall 为 242/252→252/252，两组正常 BUY 误报均为 0。</p>
+<p>保留集为 60 条、15 组，按组与 development 分开；保留集 3 轮主准确率为 98.33%/100.00%。原始标签有 4 组 16 条争议，保留原标签并单独报告；未宣称业务标签已通过验收。用户选择仅报告数据，暂不作达标决定。</p>
+<p>Redis/数据库用测试内存适配，未启动完整应用或业务 Agent，故没有线上生产和聊天首字收益证据。Jev 返回版本为 jev-1.13.0；qwen-plus 是已核实的配置名，响应未给具体后端快照。没有实际账单，不写“成本降低 96.05%”。</p>
+<p>第一次正式尝试因采集器误判停止条件中止，原始 25 条及 26 次 HTTP 尝试均保留并计入预算；修复采集器并本地验证后完整重跑，主结果只取新完整运行。能够说明这一点，比隐藏中止或挑选最好一轮更利于复现。</p>
+<h2>4. 数字来源</h2>
+<table>
+<thead>
+<tr>
+<th>简历数字</th>
+<th>主汇总字段 / 计算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>413 条 / 104 组</td>
+<td>integrity.uniqueFormalSampleCount / uniqueScenarioGroupCount</td>
+</tr>
+<tr>
+<td>3 轮 / 每组 1239 次</td>
+<td>manifest.schedule.rounds 与 summary.overall.*.planned</td>
+</tr>
+<tr>
+<td>P50 405.94→211.59 ms；47.88%</td>
+<td>overall.*.latencyMs.p50；comparison.p50ImprovementPercent</td>
+</tr>
+<tr>
+<td>P95 722.19→536.62 ms；25.69%</td>
+<td>overall.*.latencyMs.p95；comparison.p95ImprovementPercent</td>
+</tr>
+<tr>
+<td>主准确率 94.75%→98.47%</td>
+<td>overall.*.primaryAccuracy；1174/1239、1220/1239</td>
+</tr>
+<tr>
+<td>LLM 调用减少 96.05%</td>
+<td>comparison.llmLogicalReductionPercent；1−49/1239</td>
+</tr>
+<tr>
+<td>仅指定隔离环境</td>
+<td>environmentLevel=ISOLATED_JAVA_ROUTE；acceptance=NOT_EVALUATED</td>
+</tr>
+</tbody>
+</table>
+<p>以上数字按两位小数展示，原始精度保留在主运行 summary.json。不得将冒烟、模拟、第一次不完整运行混入简历主指标。</p></main></body></html>

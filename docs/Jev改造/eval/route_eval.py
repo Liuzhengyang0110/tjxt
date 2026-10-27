@@ -209,7 +209,7 @@ def jev_call(sample: dict, key: str, base_url: str, model: str, timeout: float,
                 time.sleep(min(2 ** attempt, 4))
                 continue
             reason = {401: "AUTH_FAILURE", 403: "AUTH_FAILURE", 422: "INVALID_REQUEST",
-                      429: "RATE_LIMITED", 529: "OVERLOADED"}.get(code, "SERVER_ERROR" if code >= 500 else "HTTP_ERROR")
+                      429: "RATE_LIMITED", 451: "REGION_UNAVAILABLE", 529: "OVERLOADED"}.get(code, "SERVER_ERROR" if code >= 500 else "HTTP_ERROR")
         except (urllib.error.URLError, TimeoutError) as error:
             reason = "TIMEOUT" if isinstance(error, TimeoutError) else "NETWORK_ERROR"
         except (ValueError, KeyError, TypeError, AttributeError):

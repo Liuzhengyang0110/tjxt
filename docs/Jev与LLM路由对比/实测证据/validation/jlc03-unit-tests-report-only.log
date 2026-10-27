@@ -1,0 +1,39 @@
+Failed to find real location of D:\anaconda\python.exe
+test_approved_live_criteria_can_accept (test_benchmark_report.ReportTests.test_approved_live_criteria_can_accept) ... ok
+test_boolean_cannot_impersonate_integer_identity (test_benchmark_report.ReportTests.test_boolean_cannot_impersonate_integer_identity) ... ok
+test_cli_invalid_diagnostic_and_input_protection (test_benchmark_report.ReportTests.test_cli_invalid_diagnostic_and_input_protection) ... {"status": "INVALID", "errorType": "ReportError", "diagnostic": "Duplicate request key", "runPath": "D:\\Project\\Java\\tjxt\\tj-aigc\\target\\route-benchmark\\python-tests\\tmp_op9ckoa"}
+ok
+test_cli_outputs_and_incomplete_exit_code (test_benchmark_report.ReportTests.test_cli_outputs_and_incomplete_exit_code) ... ok
+test_dry_run_is_not_executed_not_zero_accuracy (test_benchmark_report.ReportTests.test_dry_run_is_not_executed_not_zero_accuracy) ... ok
+test_duplicate_request_rejected (test_benchmark_report.ReportTests.test_duplicate_request_rejected) ... ok
+test_empty_plan_cannot_be_accepted (test_benchmark_report.ReportTests.test_empty_plan_cannot_be_accepted) ... ok
+test_explicit_report_only_policy_never_becomes_acceptance (test_benchmark_report.ReportTests.test_explicit_report_only_policy_never_becomes_acceptance) ... ok
+test_extra_request_rejected (test_benchmark_report.ReportTests.test_extra_request_rejected) ... ok
+test_failed_primary_is_also_safe_default (test_benchmark_report.ReportTests.test_failed_primary_is_also_safe_default) ... ok
+test_interrupted_record_keeps_unknown_completion (test_benchmark_report.ReportTests.test_interrupted_record_keeps_unknown_completion) ... ok
+test_invalid_latency_negative_boolean_and_nan_rejected (test_benchmark_report.ReportTests.test_invalid_latency_negative_boolean_and_nan_rejected) ... ok
+test_manifest_logical_total_must_match_records (test_benchmark_report.ReportTests.test_manifest_logical_total_must_match_records) ... ok
+test_missing_latency_is_null_not_zero (test_benchmark_report.ReportTests.test_missing_latency_is_null_not_zero) ... ok
+test_missing_record_uses_planned_denominator (test_benchmark_report.ReportTests.test_missing_record_uses_planned_denominator) ... ok
+test_mixed_mode_or_schema_or_config_rejected (test_benchmark_report.ReportTests.test_mixed_mode_or_schema_or_config_rejected) ... ok
+test_nearest_rank_empty_single_and_tail (test_benchmark_report.ReportTests.test_nearest_rank_empty_single_and_tail) ... ok
+test_negative_improvement_is_preserved (test_benchmark_report.ReportTests.test_negative_improvement_is_preserved) ... ok
+test_overall_p95_recomputed_not_average (test_benchmark_report.ReportTests.test_overall_p95_recomputed_not_average) ... ok
+test_progress_requires_unique_start_and_consistent_finish (test_benchmark_report.ReportTests.test_progress_requires_unique_start_and_consistent_finish) ... ok
+test_quality_regression_rejects_even_when_faster (test_benchmark_report.ReportTests.test_quality_regression_rejects_even_when_faster) ... ok
+test_safe_default_does_not_inflate_primary_accuracy (test_benchmark_report.ReportTests.test_safe_default_does_not_inflate_primary_accuracy) ... ok
+test_schedule_tampering_rejected_by_hash (test_benchmark_report.ReportTests.test_schedule_tampering_rejected_by_hash) ... ok
+test_smoke_never_certifies_formal_experiment (test_benchmark_report.ReportTests.test_smoke_never_certifies_formal_experiment) ... ok
+test_source_status_inconsistency_rejected (test_benchmark_report.ReportTests.test_source_status_inconsistency_rejected) ... ok
+test_split_and_scenario_slices_partition_plan (test_benchmark_report.ReportTests.test_split_and_scenario_slices_partition_plan) ... ok
+test_successful_fallback_counts_actual_attempt (test_benchmark_report.ReportTests.test_successful_fallback_counts_actual_attempt) ... ok
+test_synthetic_never_accepted_even_with_flag (test_benchmark_report.ReportTests.test_synthetic_never_accepted_even_with_flag) ... ok
+test_two_configs_same_run_are_valid (test_benchmark_report.ReportTests.test_two_configs_same_run_are_valid) ... ok
+test_warmup_is_not_formal_observation (test_benchmark_report.ReportTests.test_warmup_is_not_formal_observation) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.891s
+
+OK
+{"runId": "unit-fixture", "mode": "SYNTHETIC", "status": "COMPLETE", "acceptance": "NOT_EVALUATED", "summary": "D:\\Project\\Java\\tjxt\\tj-aigc\\target\\route-benchmark\\python-tests\\tmp69pfgc5t\\summary.json"}
+{"runId": "unit-fixture", "mode": "SYNTHETIC", "status": "INCOMPLETE", "acceptance": "NOT_EVALUATED", "summary": "D:\\Project\\Java\\tjxt\\tj-aigc\\target\\route-benchmark\\python-tests\\tmp69pfgc5t\\summary.json"}

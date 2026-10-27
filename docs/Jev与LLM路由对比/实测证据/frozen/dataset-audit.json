@@ -1,0 +1,59 @@
+{
+  "taskId": "JLC-01",
+  "staticValidation": "PASS",
+  "live": "NOT_RUN",
+  "businessReview": "PENDING",
+  "dataset": "D:\\Project\\Java\\tjxt\\docs\\Jev改造\\eval\\route-eval-v1.jsonl",
+  "datasetSha256": "8e2addb8b5b5cb561c44e89cb1593f3c5fcd6367085d79008a9acd0fddcecfd2",
+  "rowCount": 413,
+  "uniqueIds": 413,
+  "scenarioGroupCount": 104,
+  "groupSizeDistribution": {
+    "1": 1,
+    "4": 103
+  },
+  "labelCounts": {
+    "RECOMMEND": 101,
+    "CONSULT": 116,
+    "BUY": 84,
+    "KNOWLEDGE": 112
+  },
+  "splitCounts": {
+    "development": 353,
+    "holdout": 60
+  },
+  "groupSplitCounts": {
+    "development": 89,
+    "holdout": 15
+  },
+  "tagCounts": {
+    "clear": 208,
+    "boundary": 52,
+    "reference": 40,
+    "colloquial": 24,
+    "typo": 16,
+    "multiIntent": 32,
+    "insufficient": 16,
+    "outOfScope": 12,
+    "injection": 12
+  },
+  "ambiguousCount": 100,
+  "multiIntentCount": 32,
+  "historyCount": 40,
+  "missingTagsIds": [
+    "route-0001"
+  ],
+  "duplicateIds": [],
+  "crossSplitGroupCount": 0,
+  "labelChanges": 0,
+  "staticConsistentCount": 397,
+  "policyPendingCount": 16,
+  "policyPendingGroupIds": [
+    "route-0030",
+    "route-0087",
+    "route-0088",
+    "route-0096"
+  ],
+  "smokeCount": 20,
+  "reviewMethod": "逐场景语义审阅原问题及历史；机械核验全部 b/c/d 仅添加固定礼貌前缀及标点，标签/历史/标志一致；不是业务验收。"
+}

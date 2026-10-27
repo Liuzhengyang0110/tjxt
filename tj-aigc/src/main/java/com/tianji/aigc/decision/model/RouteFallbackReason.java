@@ -9,6 +9,7 @@ public enum RouteFallbackReason {
     RATE_LIMITED,
     OVERLOADED,
     AUTH_FAILURE,
+    REGION_UNAVAILABLE,
     INVALID_REQUEST,
     INVALID_RESPONSE,
     SERVER_ERROR,

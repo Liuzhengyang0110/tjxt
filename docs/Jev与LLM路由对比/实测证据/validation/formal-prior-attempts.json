@@ -1,0 +1,12 @@
+[
+  {
+    "runId": "jlc04-formal-live-20261026-202205-0b4ad9",
+    "runPath": "D:\\Project\\Java\\tjxt\\tj-aigc\\target\\route-benchmark\\jlc04-formal-live-20261026-202205-0b4ad9",
+    "reason": "Collector treated one ended invalid route output as a systemic outage; preserved as incomplete pilot, never deleted or selected for favorable metrics",
+    "records": 25,
+    "jevLogicalCalls": 13,
+    "llmLogicalCalls": 13,
+    "httpAttempts": 26,
+    "requestsSha256": "66701f022220dfdcac4adb587fa869d5c9638bcba032f0c1c2d7bb8d8ab6e70c"
+  }
+]

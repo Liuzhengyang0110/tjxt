@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>本地验证与真实测试确认</title><style>
+:root { color-scheme: light; }
+* { color: #000000 !important; box-sizing: border-box; }
+body { margin: 0; background: #ffffff; font-family: "SimSun", "宋体", serif; font-size: 16px; line-height: 1.85; }
+main { max-width: 1140px; margin: 0 auto; padding: 48px 52px 80px; }
+h1,h2,h3,h4,h5,h6,th,caption,nav { font-family: "SimHei", "黑体", sans-serif; }
+h1 { font-size: 30px; line-height: 1.5; margin: 0 0 24px; padding-bottom: 18px; border-bottom: 2px solid #000000; }
+h2 { font-size: 23px; line-height: 1.55; margin: 42px 0 16px; padding: 9px 0; border-bottom: 1px solid #888888; }
+h3 { font-size: 19px; margin: 28px 0 12px; }
+p { margin: 12px 0; }
+a { text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+nav { border: 1px solid #888888; padding: 14px 18px; margin: 20px 0 28px; background: #f7f7f7; }
+nav a { display: inline-block; margin-right: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 18px 0 26px; font-size: 14px; line-height: 1.75; }
+th,td { border: 1px solid #999999; padding: 10px 12px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+th { font-weight: 700; background: #eeeeee; }
+td { font-family: "SimSun", "宋体", serif; }
+pre,code { font-family: "SimSun", "宋体", serif; }
+code { font-size: 0.92em; }
+pre { padding: 18px 20px; border: 1px solid #999999; background: #f7f7f7; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.8; font-size: 14px; }
+blockquote { margin: 20px 0; padding: 6px 20px; border-left: 3px solid #000000; background: #f7f7f7; }
+li { margin: 8px 0; }
+@media (max-width: 800px) { main { padding: 24px 18px 48px; } table { display: block; overflow-x: auto; } th,td { min-width: 130px; } }
+@media print { main { max-width: none; padding: 0; } body { font-size: 11pt; } h1 { font-size: 20pt; } h2 { font-size: 16pt; break-after: avoid; } h3 { break-after: avoid; } table,pre { font-size: 9pt; } thead { display: table-header-group; } nav { display: none; } }
+
+html, body, body * { color: #000000 !important; } body, p, li, td, th, code, pre { font-family: SimSun, "宋体", serif; } h1,h2,h3,h4,h5,h6 { font-family: SimHei, "黑体", sans-serif; } table { width:100%; } td { overflow-wrap:anywhere; }
+</style></head><body><main><h1>Jev 与 LLM 路由对比执行记录</h1>
+<p>日期：2026-10-26（Asia/Shanghai）。任务源：同目录《Jev与LLM路由耗时对比测试任务指南》v1.0。</p>
+<p>本批已获授权串行执行 JLC-01～JLC-05，核验前置产物后自动继续。真实 API 前集中确认缺少的配置、调用上限和预算；本记录不代替该确认。</p>
+<p>工作目录：<code>D:\Project\Java\tjxt</code>；分支：<code>jev-routing</code>；起始 HEAD：<code>90a3f044bc586066dd1fc6796184d5ef8432fd82</code>。起始已有改动文件哈希记录于 <code>tj-aigc/target/route-benchmark/workspace-before.json</code>，共 21 个文件；不提交、不推送、不修改线上配置。</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>当前状态</th>
+<th>验证与产物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JLC-01</td>
+<td>DOC_COMPLETE；静态 PASS</td>
+<td>已独立核验 413 条样本、20 条冒烟 ID、18 项源码哈希和 413 条审阅记录；见实验协议.md、protocol.json、dataset-audit.json</td>
+</tr>
+<tr>
+<td>JLC-02</td>
+<td>CODE_COMPLETE；本地 PASS</td>
+<td>最新 21 项 Java 组件测试通过；初版模拟、入口和 DRY_RUN 已核验；见 JLC-02验收.md 与 JLC-04验收.md</td>
+</tr>
+<tr>
+<td>JLC-03</td>
+<td>CODE_COMPLETE；本地 PASS</td>
+<td>最新 30 项 Python 合同测试通过，REPORT_ONLY 不自动达标；真实归档严格复算与独立公式核验一致</td>
+</tr>
+<tr>
+<td>JLC-04</td>
+<td>VERIFIED；COMPLETE</td>
+<td>主运行 2538/2538；每组正式 1239；累计 2674 次 HTTP 执行尝试；仅报告数据，未判达标；见 JLC-04验收.md</td>
+</tr>
+<tr>
+<td>JLC-05</td>
+<td>DOC_COMPLETE</td>
+<td>测试报告、简历表述、证据索引及脱敏原始归档已生成；见 JLC-05验收.md</td>
+</tr>
+</tbody>
+</table>
+<p>已有资源核实：本地 Maven 仓库为 <code>D:\Tools\maven\maven-repository</code>，关键 Spring AI 依赖已缓存。当前执行进程未读取到 <code>JEV_API_KEY</code> 和 <code>DASHSCOPE_API_KEY</code>；本地应用资源未给出聊天 LLM 的实际模型名与动态路由提示词快照。只检查了键是否存在，未输出凭据，也未访问 Nacos、Redis、数据库或模型服务。</p>
+<p>后续静态核实找到候选：IDEA 运行配置含 Jev 凭据环境项，本地 Nacos 缓存声明 DashScope <code>qwen-plus</code>、存在 DashScope 凭据及 957 字节路由提示词快照。候选只读核实，未输出凭据；是否复用仍待集中确认。系统代理声明 <code>127.0.0.1:7890</code>，监听枚举权限不足，不能据此判断代理是否运行。详见真实测试确认清单.md。</p>
+<p>JLC-02 的模拟 fixture 仅验证采集程序：<code>tj-aigc/target/route-benchmark/jlc02-synthetic-fixture-v1</code>，40 条中 35 条 OK、5 条 SAFE_DEFAULT，覆盖四种来源。根会话独立核验了计划/记录唯一键、协议必填字段、文件哈希；模拟耗时不得用于简历收益。到 JLC-03 启动时，21 个受保护既有文件内容均与起始快照一致。</p>
+<p>最终状态以本文件后续更新和实际产物为准；模拟数据、本地 PASS、历史日志均不升级为真实 API 测试结果。</p>
+<p>集中确认已取得用户实际回复；按已给范围先冒烟，再核验并自动进入正式测试与 JLC-05。首次自动审批因 payload 范围拒绝，补充人工数据与通用提示词的核验证据后复审通过。真实冒烟已启动；在正式数据就绪前，不生成带收益结论的最终报告或简历表述。</p>
+<p>实际运行：冒烟 <code>jlc04-smoke-live-20261026-201850-be37aa</code>，已完成且数据完整，所有60项 status=OK，Jev直接采用29次、低置信度回退1次；返回Jev版本为jev-1.13.0，LLM配置为qwen-plus，具体服务端LLM版本未获得。<code>smoke-gate.json</code>已记录入口健康核验，不代表优化达标。正式运行 <code>jlc04-formal-live-20261026-202205-0b4ad9</code>，采用冻结配置与计划，不调参或跳题。</p>
+<p>首次正式运行因采集器将单次非法枚举导致的安全默认误判为系统故障而停在25项，原数据与26次HTTP尝试全部保留。仅修复采集器停止分类，21项Java测试通过；新完整正式运行 <code>jlc04-formal-live-20261026-203132-2b882a</code> 已启动。预算扣除原26次后，新正式上限3874，含冒烟全批至多3961次，低于4000；Jev保守估算3.526656美元，低于5美元。完整结果只使用新完整运行，原失败尝试进入披露与预算台账。</p>
+<p>最终更新：主运行已完整完成，归档后严格复算成功；完整性 VERIFIED，优化接受状态 NOT_EVALUATED / USER_REPORT_ONLY。原有 21 个文件哈希与起始快照一致。此前资源待确认、测试运行中等段落为过程记录，不代表当前状态。最终范围、数字、预算及限制以测试报告.md 和实测证据为准。</p>
+<hr />
+<h1>JLC-04 真实隔离验证验收</h1>
+<p>状态：<strong>VERIFIED / COMPLETE</strong>，范围 ISOLATED_JAVA_ROUTE。优化接受状态 <strong>NOT_EVALUATED / USER_REPORT_ONLY</strong>；APPLICATION_ROUTE 未实施、未验证。</p>
+<p>已核验 JLC-01 冻结协议、JLC-02 最新 21 项 Java 测试和 JLC-03 最新 30 项 Python 测试；用户明确复用配置、现有代理与凭据，Jev 5 美元余额条件采用官方价格和保守边界估算，沿用原标签仅报告数据。参见预算与授权记录.md。</p>
+<p>冒烟 jlc04-smoke-live-20261026-201850-be37aa 完整 60 条后进入正式。首次正式 jlc04-formal-live-20261026-202205-0b4ad9 保留 INCOMPLETE 25 条，修复采集器停止分类后以新身份完整重跑；主运行 jlc04-formal-live-20261026-203132-2b882a，2538 条逐请求、计划、START/FINISH 全部对齐，正式每组 1239、预热 60，缺失/重复/未知为 0。真实回退及安全默认均未移除。</p>
+<p>三次真实运行均已脱敏归档；完整运行归档复算退出 0，首次不完整运行退出 3；独立公式复核总体 P50/P95/P99、主准确率、调用数一致。累计 RestClient 尝试 2674 次，未超过 4000；Jev 累计 1312 次，保守输入边界估算 3.526656 美元，不是实际账单或货币硬限额。无未决请求自动重放。</p>
+<p>指定环境验证不代表业务/上线接受；负责人决策按用户要求暂不裁定。完整指标、适配差异与限制见测试报告.md；原始证据与哈希见证据索引.md。</p>
+<hr />
+<h1>JLC-05 分析与文档验收</h1>
+<p>状态：<strong>DOC_COMPLETE</strong>。已在原文档目录生成测试报告.md、简历表述.md、证据索引.md 及黑白 HTML 阅读版。</p>
+<p>报告使用完整主运行，包含总体及逐轮分位数、主准确率、各类 Recall、保留集和争议切片、回退/错误、全部真实尝试预算及首次中止披露。简历每个收益数字可追溯主运行 summary.json；不使用模拟、冒烟或不完整运行宣称正式收益。观察到指定环境耗时降低；按用户选择不判定达标。未验证应用层、线上、首字、费用或吞吐收益。</p>
+<p>归档后严格复算与独立公式核验通过，证据 SHA-256 见 inventory.json。HTML 标题黑体、正文与表格宋体、全部文字黑色；无外部资源。既有改动受保护，未提交、未推送、未修改线上配置。</p>
+<hr />
+<h1>预算与真实测试授权记录</h1>
+<p>日期：2026-10-26（Asia/Shanghai）。来源：用户在集中确认卡片中的实际回复。</p>
+<h2>1. 已确认范围</h2>
+<p>用户确认使用 <code>ISOLATED_JAVA_ROUTE</code>、Jev <code>jev-1.13.0</code>、DashScope <code>qwen-plus</code>、本地缓存的通用路由提示词与现有凭据；Jev 通过现有本机代理。仅测试路由，不连接数据库、Redis、Nacos，不调用下游业务 Agent 或工具。</p>
+<p>用户对规模和费用的回复为：“目前jev账户上只有5美金，如果够用就按你的方案执行”。因此执行以核实 Jev 5 美元可覆盖为条件，保留原计划：20 条冒烟与 413 条 × 3 轮正式测试，包含预热共 2598 次路由；Jev 逻辑调用最多 1299，LLM 逻辑调用最多 2598，跨两供应商的 RestClient 执行尝试累计最多 4000（冒烟 100、正式 3900）。</p>
+<p>用户选择沿用原标签、仅报告客观数据，不判定是否达标。4 组 16 条标签争议继续单列，不将其视为生产业务标签已验收，也不启用统计工具的 <code>--acceptance-approved</code>。</p>
+<h2>2. Jev 余额覆盖核算</h2>
+<p>2026-10-26 查阅 <a href="https://docs.typesafe.ai/models">TypeSafe 官方模型文档</a>：Jev 1.13 输入价格为 0.042 美元/百万 token，输出免费；默认每请求上下文上限 64k token。本测试仅一个分类问题，未开启长上下文。</p>
+<p>使用每次请求都达到 64,000 输入 token 的保守估算：</p>
+<p><code>1299 × 64,000 ÷ 1,000,000 × 0.042 = 3.491712 美元</code></p>
+<p>该估算低于用户报告的 5 美元余额，实际人工短样本通常远小于请求上下文上限。它是按公开标准价及逻辑调用上限计算的估算，不是账户余额核验、真实账单或程序货币硬限额；底层传输重连不可精确观测，其他并发消费也不属于本测试。Jev 不做应用层重试，保持独立调用上限。鉴权、余额/配额、系统性失败或不确定完成状态出现时，停止继续发起。</p>
+<p>5 美元针对 Jev 账户；DashScope 使用既有账号单独计费，受本次逻辑调用和执行尝试上限限制。没有真实账单证据时不将逻辑调用减少比例写成费用减少比例。</p>
+<h2>2.1 首次正式采集误停与预算扣除</h2>
+<p>首次正式运行在 25 项后停止（13 次 Jev、13 次 LLM、26 次 HTTP 执行尝试）。原因是一条越界请求触发 LLM 非法路由输出，采集器过度保守地把单次安全默认当成服务故障。该结果本应作为失败保留并继续测试；它没有未知完成状态。</p>
+<p>本地修复只区分已结束的非法枚举输出与系统故障，不改生产路由、模型、提示词、阈值或样本顺序。增加合同测试后 21 项 Java 测试通过。原不完整数据保留并出具 INCOMPLETE 汇总；为避免将不同采集器版本拼接为一次测量，使用新 runId 完整重跑全部固定计划，失败样本也仍会被重新遇到并计入，不能删除不利结果。</p>
+<p>原 26 次尝试从正式阶段 3900 次额度扣除，新正式运行最多 3874 次。加冒烟实际 61 次与原 26 次，整批至多 3961 次，仍低于用户确认的 4000 次执行尝试上限。重跑最多额外 13 次 Jev，按最保守上下文核算为 <code>1312 × 64,000 ÷ 1,000,000 × 0.042 = 3.526656 美元</code>，仍低于 5 美元。所有尝试均进入最终预算与证据台账，初版 1299 次只是原始无中断计划的估计，不隐瞒额外消费。</p>
+<h2>3. 发送内容与审批核验</h2>
+<p>首次申请执行真实冒烟时，自动审批以“尚未明确授权发送具体可能敏感的 payload”为由拒绝，未启动进程或发起模型请求。随后核验了样本来源与发送字段，并提交同一命令复审，复审通过后才启动。</p>
+<p>核验依据：413 条来自仓库人工构造数据集，104 个场景组；每条问题及人工历史合计最长 62 字符。静态语义审阅及电话、邮箱、证件、支付卡、凭据、内部 IP 模式检查未发现相应敏感内容。动态提示词仅为意图分类规则和虚构示例。没有发送现有真实会话、数据库内容、Nacos 配置文件或样本标签；凭据仅用于向已确认供应商认证，在内存中注入，不写进 payload、命令或报告。</p>
+<p>受控原始记录位于 <code>tj-aigc/target/route-benchmark/live-approval.json</code>、<code>payload-scope-review.json</code> 和后续运行目录。报告只保留必要非敏感摘要及哈希，密钥不落入交付物。</p>
+<h2>最终实际消耗核对</h2>
+<p>三次真实运行累计 2623 次路由（含 100 次预热），Jev 1312 次、LLM 1362 次、RestClient 执行尝试 2674 次，低于 4000 上限。Jev 保守边界估算 3.526656 美元，实际账单未知；未查询余额、未声称货币硬限额。运行明细及机器可读核对见实测证据/validation/final-budget-ledger.json。用户选择 REPORT_ONLY，未判断达标。</p>
+<hr />
+<h1>真实 API 测试确认清单</h1>
+<p>日期：2026-10-26。本文保留真实测试前的确认提案。<strong>当前状态：用户已集中确认，真实测试已完成</strong>；累计 2623 次路由、2674 次 RestClient 尝试，包含首次中止与预热。JLC-04 VERIFIED，JLC-05 DOC_COMPLETE；仅报告数据，暂不判定达标。最终授权与结果见预算与授权记录.md、执行记录.md、测试报告.md。下述“待确认”“0 次”均属于执行前历史状态。</p>
+<h2>1. 已找到的候选配置</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>本地证据</th>
+<th>运行前处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jev</td>
+<td>当前源码默认 <code>jev-1.13.0</code>；IDEA 的 AIGCApplication 运行配置含 Jev Key 环境项</td>
+<td>用户确认复用后，从原配置在内存中注入，不复制凭据到文档或命令</td>
+</tr>
+<tr>
+<td>普通 LLM</td>
+<td>本地 Nacos 配置缓存声明 DashScope <code>qwen-plus</code>，聊天 options 未见其他显式覆盖；源码的默认 ChatClient 绑定 DashScope 模型</td>
+<td>用户确认这是此次基线；不把 OpenAI 客户端或其他模型当作该基线</td>
+</tr>
+<tr>
+<td>路由提示词</td>
+<td>找到非空本地缓存快照，957 字节，SHA-256 <code>539446f25a3188ead5546407c6a0d81dfc8a081994aebdc782d4149bdcdd1949</code></td>
+<td>用户确认复用该快照；通过原 RouteAgent 追加现有固定输出协议</td>
+</tr>
+<tr>
+<td>DashScope 凭据</td>
+<td>本地缓存存在非空凭据配置</td>
+<td>用户确认复用后只在内存中注入；不展示实际值</td>
+</tr>
+<tr>
+<td>Jev 网络</td>
+<td>local 配置及系统代理均声明本机 HTTP 代理 <code>127.0.0.1:7890</code>；本地监听枚举受到访问权限限制，无法据此确认代理是否运行</td>
+<td>运行前确认复用该代理或提供实际网络配置；不擅自更换出口或尝试真实 API</td>
+</tr>
+</tbody>
+</table>
+<p>上述均是本地静态候选，未访问 Nacos、Redis、数据库或模型 API，不能当作当前运行进程已生效配置。源码与数据基线仍由 protocol.json 记录。</p>
+<h2>2. 待集中确认的范围</h2>
+<ol>
+<li>使用 <code>ISOLATED_JAVA_ROUTE</code>，仅真实调用 Jev 和 DashScope；存储用测试内存，不启动完整应用，不执行业务 Agent、工具或订单。</li>
+<li>是否复用表中的模型、提示词与现有凭据，以及 Jev 的可用网络方式。用户无需在聊天中发送密钥。</li>
+<li>按当前原始 413 条标签开展实验，保留 4 组 16 条争议单独切片；结果仅代表人工构造集，不宣称业务标签已验收。</li>
+<li>冒烟 20 条、正式 413 条 × 3 轮、并发 1、每轮每组预热 10 次；固定间隔 250ms、固定种子及 AB/BA 调度。是否采用该完整规模。</li>
+<li>请求上限与预算。完整计划共 2598 次路由决策，最坏 1299 次 Jev 和 2598 次 LLM 逻辑调用；HTTP 重试另计。最终可实施的硬上限以采集程序本地验证为准，不将逻辑数冒称 HTTP 数。</li>
+<li>金额预算、计价来源和账号配额。缺少实时账单或可靠计价时，程序不能声称货币硬限额；可以在用户明确批准后按请求次数控制，或配合账号侧金额限制。无批准不调用。</li>
+<li>是否采用协议建议的接受判据：P50/P95 均降低、主准确率下降不超过 1 个百分点、BUY Recall 不下降、最终错误与安全默认比例不升高。否则只报告客观数据，不擅自宣布达标。</li>
+</ol>
+<h2>3. 已完成的本地验证与具体提案</h2>
+<p>JLC-02 的 20 项 Java 组件测试及显式模拟采集入口通过；JLC-03 的 29 项 Python 合同测试通过。模拟产物 40 项计划与记录完全对账，统计结果与手算参考一致；DRY_RUN 成功生成 60 项计划、模型请求为 0。验收详见 JLC-02验收.md、JLC-03验收.md。</p>
+<p>已准备并实际执行两份无凭据候选配置的 DRY_RUN，批准开关仍为 false。分别生成 60 项冒烟计划、2538 项正式计划，requests.jsonl 均为空，没有模型调用：</p>
+<ul>
+<li><code>D:\Project\Java\tjxt\tj-aigc\target\route-benchmark\live-candidate-smoke.json</code></li>
+<li><code>D:\Project\Java\tjxt\tj-aigc\target\route-benchmark\live-candidate-formal.json</code></li>
+</ul>
+<p>候选采用 Jev <code>jev-1.13.0</code>、DashScope <code>qwen-plus</code>、上述本地路由提示词快照、测试内存存储。Jev 使用 <code>127.0.0.1:7890</code>，连接/读取超时 500/1200ms；LLM 显式连接/读取超时 5/20s。复用官方 Spring AI 默认重试：最多 10 次、初始间隔 2s、倍数 5、最大间隔 180s，仅按官方瞬态错误规则重试。单次路由外层截止为 30s，触及截止则禁止后续发起、整次运行标不完整；不会用中断当作快速成功。网络超时为本次实验显式参数，未冒称已经确认线上生效值。</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>路由上限（含预热）</th>
+<th>Jev 逻辑上限</th>
+<th>LLM 逻辑上限</th>
+<th>RestClient 执行尝试上限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20 条冒烟、1 轮</td>
+<td>60</td>
+<td>30</td>
+<td>60</td>
+<td>100</td>
+</tr>
+<tr>
+<td>413 条正式、3 轮</td>
+<td>2538</td>
+<td>1269</td>
+<td>2538</td>
+<td>3900</td>
+</tr>
+<tr>
+<td>本批合计</td>
+<td>2598</td>
+<td>1299</td>
+<td>2598</td>
+<td>4000</td>
+</tr>
+</tbody>
+</table>
+<p>这些执行尝试上限包含 Spring AI 应用层重试，跨两供应商累计；不等于供应商到账次数或 JDK 内部重传次数。金额政策仍待明确：可按已批准请求次数控制、不另设金额上限，或由用户指定金额并确认账号侧限额。程序不宣称货币硬限额，未批准前不会加载真实客户端。</p>
+<p>真实调用入口为本目录 <code>Invoke-RouteBenchmark.ps1</code> 的显式 <code>-Live</code>；用户确认后才会生成新的 LIVE 配置、runId 与批准引用，安全注入现有凭据并先冒烟、通过后自动正式执行。当前两份候选不可直接用于 LIVE，也不得复用已经存在的 DRY_RUN 运行目录。</p></main></body></html>

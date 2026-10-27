@@ -4,6 +4,7 @@ import sys
 import tempfile
 import threading
 import unittest
+import urllib.error
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
@@ -118,6 +119,19 @@ class RouteEvalTest(unittest.TestCase):
         self.assertEqual(result["costUsd"], .000012)
         self.assertEqual(requests[0][0], "Bearer test-secret")
         self.assertEqual(requests[0][1]["state"]["latest_user_message"], "推荐 Java 课")
+        self.assertNotIn("test-secret", json.dumps(result))
+
+    def test_jev_region_unavailable_does_not_retry_or_expose_key(self):
+        error = urllib.error.HTTPError("https://jev.invalid/v1/systemone", 451,
+                                       "Unavailable For Legal Reasons", {}, None)
+        with patch.object(evaluate.urllib.request, "urlopen", side_effect=error) as urlopen:
+            result = evaluate.jev_call(
+                {"question": "推荐 Java 课", "history": []}, "test-secret",
+                "https://jev.invalid", "jev-test", 2, 2, 1.0, 1.0)
+
+        self.assertEqual(result["error"], "REGION_UNAVAILABLE")
+        self.assertEqual(result["attempts"], 1)
+        urlopen.assert_called_once()
         self.assertNotIn("test-secret", json.dumps(result))
 
 

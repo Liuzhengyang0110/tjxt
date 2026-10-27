@@ -1,0 +1,43 @@
+{
+  "runs": [
+    {
+      "runId": "jlc04-smoke-live-20261026-201850-be37aa",
+      "status": "COMPLETE",
+      "routes": 60,
+      "warmups": 20,
+      "jevCallCount": 30,
+      "llmCallCount": 31,
+      "httpAttemptCount": 61
+    },
+    {
+      "runId": "jlc04-formal-live-20261026-202205-0b4ad9",
+      "status": "INCOMPLETE",
+      "routes": 25,
+      "warmups": 20,
+      "jevCallCount": 13,
+      "llmCallCount": 13,
+      "httpAttemptCount": 26
+    },
+    {
+      "runId": "jlc04-formal-live-20261026-203132-2b882a",
+      "status": "COMPLETE",
+      "routes": 2538,
+      "warmups": 60,
+      "jevCallCount": 1269,
+      "llmCallCount": 1318,
+      "httpAttemptCount": 2587
+    }
+  ],
+  "totals": {
+    "routes": 2623,
+    "warmups": 100,
+    "jevCallCount": 1312,
+    "llmCallCount": 1362,
+    "httpAttemptCount": 2674
+  },
+  "restClientAttemptCap": 4000,
+  "jevConservativeEstimateUsd": 3.526656,
+  "actualCostUsd": null,
+  "priceSource": "https://docs.typesafe.ai/models",
+  "currencyHardCap": false
+}
